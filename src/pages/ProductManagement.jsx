@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import ProductList from '../../src/components/product/ProductList';
+import ProductList from '../components/product/TempList';
 import ProductForm from '../../src/components/product/ProductForm';
 import ProductDetail from '../../src/components/product/ProductDetails';
 
