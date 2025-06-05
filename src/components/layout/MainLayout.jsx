@@ -24,6 +24,7 @@ const MainLayout = () => {
 					isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
 				} md:translate-x-0 md:static md:inset-auto md:z-auto`}
 			>
+				{/* Name Logo */}
 				<div className="text-xl font-bold mb-6 flex items-center justify-between">
 					<div>
 						<span className="text-purple-500">Agent</span>
@@ -33,6 +34,8 @@ const MainLayout = () => {
 						<FaBars className="w-5 h-5 text-white" />
 					</button>
 				</div>
+
+				{/* Navigation Links */}
 				<ul className="space-y-2 cursor-pointer">
 					<li>
 						<NavLink
@@ -47,12 +50,12 @@ const MainLayout = () => {
 							onClick={() => setIsSidebarOpen(false)}
 						>
 							<FaPlusCircle className="w-5 h-5 mr-2" />
-							Đại lý
+							Trang chủ
 						</NavLink>
 					</li>
 					<li>
 						<NavLink
-							to="/deliveries"
+							to="/agents"
 							className={({ isActive }) =>
 								`flex items-center p-2 rounded ${
 									isActive
@@ -63,7 +66,7 @@ const MainLayout = () => {
 							onClick={() => setIsSidebarOpen(false)}
 						>
 							<FaFileExport className="w-5 h-5 mr-2" />
-							Xuất hàng
+							Đại lý
 						</NavLink>
 					</li>
 					<li>
@@ -141,8 +144,7 @@ const MainLayout = () => {
 			)}
 
 			<div className="flex-1 flex flex-col">
-				{/* <main className="flex-1 p-6 overflow-y-auto md:ml-64"> */}
-				<main className="flex-1 p-6 overflow-y-auto">
+				<main className="flex-1 overflow-y-auto">
 					<Outlet />
 				</main>
 			</div>
