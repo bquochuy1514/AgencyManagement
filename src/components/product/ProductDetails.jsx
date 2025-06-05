@@ -1,40 +1,50 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+// ProductDetails.jsx
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getProductById } from '../../services/productService';
 
-const ProductDetail = ({ product }) => {
+const ProductDetails = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
+  const [product, setProduct] = useState(null);
+  const [error, setError] = useState(null);
 
-  if (!product) return null;
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const data = await getProductById(id);
+        setProduct(data);
+      } catch (err) {
+        setError(err.message || 'Không thể tải chi tiết sản phẩm');
+      }
+    };
+    fetchProduct();
+  }, [id]);
+
+  if (!product && !error) return <p>Đang tải...</p>;
 
   return (
-    <div className="product-detail bg-white shadow-md rounded-lg p-6 mb-6">
-      <h3 className="text-lg font-semibold text-blue-600 mb-4">
-        Chi tiết sản phẩm
-      </h3>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <p className="text-gray-700"><strong>ID:</strong> {product.productID}</p>
-          <p className="text-gray-700"><strong>Tên sản phẩm:</strong> {product.productName}</p>
-          <p className="text-gray-700"><strong>Đơn vị tính:</strong> {product.unit?.unitName || '—'}</p>
+    <div className="mt-4">
+      <h2 className="text-xl font-semibold mb-2">Chi tiết sản phẩm</h2>
+      {error && <p className="text-red-500">{error}</p>}
+      {product && (
+        <div className="bg-white p-4 border rounded">
+          <p><strong>Mã:</strong> {product.productID}</p>
+          <p><strong>Tên:</strong> {product.productName}</p>
+          <p><strong>Đơn vị:</strong> {product.unit.unitName}</p>
+          <p><strong>Giá nhập:</strong> {product.importPrice}</p>
+          <p><strong>Giá xuất:</strong> {product.exportPrice}</p>
+          <p><strong>Số lượng tồn kho:</strong> {product.inventoryQuantity}</p>
+          <button
+            onClick={() => navigate('/products')}
+            className="bg-gray-500 text-white px-4 py-2 mt-4 rounded"
+          >
+            Quay lại
+          </button>
         </div>
-        <div>
-          <p className="text-gray-700"><strong>Giá nhập:</strong> {product.importPrice.toLocaleString()} VND</p>
-          <p className="text-gray-700"><strong>Giá xuất:</strong> {product.exportPrice.toLocaleString()} VND</p>
-          <p className="text-gray-700"><strong>Tồn kho:</strong> {product.inventoryQuantity}</p>
-        </div>
-      </div>
-
-      <div className="mt-6">
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-          onClick={() => navigate(`/products/edit/${product.productID}`)}
-        >
-          Chỉnh sửa
-        </button>
-      </div>
+      )}
     </div>
   );
 };
 
-export default ProductDetail;
+export default ProductDetails;
