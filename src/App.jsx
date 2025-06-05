@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
 import AgentManagement from './pages/AgentManagement';
 import ProductManagement from './pages/ProductManagement';
+import HomePage from './pages/HomePage';
 
 function App() {
 	// Placeholder component cho các trang chưa tạo
@@ -18,8 +19,9 @@ function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route path="/" element={<MainLayout />}>
-					<Route index element={<AgentManagement />} />
+					<Route index element={<HomePage />} />
 					<Route path="/products" element={<ProductManagement />} />
+					<Route path="/agents" element={<AgentManagement />} />
 					<Route path="*" element={<Placeholder />} />
 				</Route>
 			</Routes>
