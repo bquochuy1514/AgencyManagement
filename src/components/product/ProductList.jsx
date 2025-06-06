@@ -1,9 +1,33 @@
-// ProductList.jsx
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
-const ProductList = ({ products, onShowForm }) => {
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { deleteProduct } from '../../services/productService';
+
+const ProductList = ({ products, setProducts, onShowForm }) => {
   const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+
+  const handleDelete = async (productId) => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+      try {
+        await deleteProduct(productId);
+        setProducts(products.filter((product) => product.productID !== productId));
+      } catch (err) {
+        alert('Không thể xóa sản phẩm: ' + err.message);
+      }
+    }
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden">
@@ -30,7 +54,8 @@ const ProductList = ({ products, onShowForm }) => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {products.map((product) => (
+
+            {currentItems.map((product) => (
               <tr key={product.productID} className="hover:bg-gray-50 transition">
                 <td className="px-6 py-4 whitespace-nowrap">{product.productID}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{product.productName}</td>
@@ -46,10 +71,11 @@ const ProductList = ({ products, onShowForm }) => {
                     Xem
                   </button>
                   <button
-                    onClick={() => navigate(`/products/edit/${product.productID}`)}
-                    className="text-yellow-600 hover:text-yellow-800 mr-2"
+                    onClick={() => handleDelete(product.productID)}
+                    className="text-red-600 hover:text-red-800"
                   >
-                    Sửa
+                    Xóa
+
                   </button>
                 </td>
               </tr>
@@ -57,6 +83,31 @@ const ProductList = ({ products, onShowForm }) => {
           </tbody>
         </table>
       </div>
+      {products.length > itemsPerPage && (
+        <div className="p-4 flex justify-center items-center space-x-2">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className={`px-4 py-2 rounded-md ${
+              currentPage === 1 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'
+            }`}
+          >
+            Trang trước
+          </button>
+          <span className="text-gray-700">Trang {currentPage} / {totalPages}</span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className={`px-4 py-2 rounded-md ${
+              currentPage === totalPages
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-blue-600 text-white hover:bg-blue-700'
+            }`}
+          >
+            Trang sau
+          </button>
+        </div>
+      )}
     </div>
   );
 };
