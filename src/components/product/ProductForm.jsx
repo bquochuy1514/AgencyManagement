@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { createProduct } from '../../services/productService';
 
@@ -151,12 +152,12 @@ const ProductForm = ({ onCancel, setShowForm, products, setProducts }) => {
             className="mt-1 block w-full bg-[#1a2634] border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-purple-600 text-white"
             placeholder="Nhập số lượng"
           />
-          {errors.inventoryQuantity && <p className="text-red-400 text-sm mt-1">{errors.inventoryQuantity}</p>}
+          {errors.inventoryQuantity && <p className="text-red-500 text-sm mt-1">{errors.inventoryQuantity}</p>}                 
         </div>
         <div className="flex space-x-4">
           <button
-            type="submit"
-            className="w-full bg-purple-600 px-4 py-2 rounded-md hover:bg-purple-700 transition text-white"
+            type="submit"                                               
+            className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
           >
             Thêm sản phẩm
           </button>

@@ -1,7 +1,8 @@
-// import React, { useState, useEffect } from 'react';
-// import ProductList from '../components/product/ProductList';
-// import ProductForm from '../components/product/ProductForm';
-// import { getAllProducts } from '../services/productService';
+
+import React, { useState, useEffect } from 'react';
+import ProductList from '../components/product/ProductList';
+import ProductForm from '../components/product/ProductForm';
+import { getAllProducts } from '../services/productService';
 
 // const ProductManagement = () => {
 // 	const [products, setProducts] = useState([]);
@@ -67,4 +68,4 @@
 // 	);
 // };
 
-// export default ProductManagement;
+export default ProductManagement;

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { deleteProduct } from '../../services/productService';
@@ -43,20 +44,44 @@ const ProductList = ({ products, setProducts, onShowForm }) => {
           + Thêm Sản Phẩm Mới
         </button>
       </div>
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mã</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tên</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Đơn vị</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Giá nhập</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Giá xuất</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tồn kho</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hành động</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
 
-      {/* Table Section */}
-      <div className="bg-[#2a3b4c] rounded-lg shadow-md overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full">
-            <thead>
-              <tr className="text-gray-300 text-sm uppercase">
-                <th className="px-4 py-3 text-left">MÃ</th>
-                <th className="px-4 py-3 text-left">TÊN</th>
-                <th className="px-4 py-3 text-left">ĐƠN VỊ</th>
-                <th className="px-4 py-3 text-left">GIÁ NHẬP</th>
-                <th className="px-4 py-3 text-left">GIÁ XUẤT</th>
-                <th className="px-4 py-3 text-left">TỒN KHO</th>
-                <th className="px-4 py-3 text-left">HÀNH ĐỘNG</th>
+            {currentItems.map((product) => (
+              <tr key={product.productID} className="hover:bg-gray-50 transition">
+                <td className="px-6 py-4 whitespace-nowrap">{product.productID}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{product.productName}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{product.unit.unitName}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{product.importPrice}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{product.exportPrice}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{product.inventoryQuantity}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <button
+                    onClick={() => navigate(`/products/detail/${product.productID}`)}
+                    className="text-blue-600 hover:text-blue-800 mr-2"
+                  >
+                    Xem
+                  </button>
+                  <button
+                    onClick={() => handleDelete(product.productID)}
+                    className="text-red-600 hover:text-red-800"
+                  >
+                    Xóa
+
+                  </button>
+                </td>
               </tr>
             </thead>
             <tbody>
