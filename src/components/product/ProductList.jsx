@@ -165,7 +165,7 @@ const ProductList = ({ products, setProducts, onShowForm }) => {
           </button>
         </div>
       )}
-    </div>
+    </div>  
   );
 };
 
