@@ -33,7 +33,7 @@ const ProductList = ({ products, setProducts, onShowForm }) => {
   };
 
   return (
-    <div className="p-6 bg-[#1a2634] min-h-screen">
+    <div className="p-6 bg-[#1a2634] rounded-lg min-h-screen">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-6">
         <div>
