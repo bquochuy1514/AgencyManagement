@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { addImportReceipt } from '../../services/receiptService';
 
-const ImportReceiptForm = () => {
+const ImportReceiptForm = ({ onCancel, onSuccess }) => {
   const [formData, setFormData] = useState({
-    dateReceipt: '',
+    dateReceipt: new Date().toISOString().split('T')[0], // Mặc định ngày hiện tại
     totalPrice: 0,
   });
   const [message, setMessage] = useState(null);
@@ -20,16 +20,21 @@ const ImportReceiptForm = () => {
         dateReceipt: formData.dateReceipt,
         totalPrice: parseInt(formData.totalPrice),
       });
-      setMessage({ type: 'success', text: response.message });
-      setFormData({ dateReceipt: '', totalPrice: 0 });
+      if (response.status === 'CREATED') {
+        setMessage({ type: 'success', text: response.message });
+        setFormData({ dateReceipt: new Date().toISOString().split('T')[0], totalPrice: 0 });
+        if (onSuccess) onSuccess();
+      } else {
+        setMessage({ type: 'error', text: 'Tạo phiếu không thành công' });
+      }
     } catch (error) {
-      setMessage({ type: 'error', text: error.message });
+      setMessage({ type: 'error', text: error.message || 'Lỗi khi tạo phiếu' });
     }
   };
 
   return (
-    <div className="p-6 bg-gray-900 rounded-lg">
-      <h2 className="text-2xl font-semibold mb-4">Tạo Phiếu Nhập Hàng</h2>
+    <div className="p-6 bg-[#2a3b4c] rounded-lg">
+      <h3 className="text-xl font-semibold text-white mb-4">Tạo Phiếu Nhập Mới</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-gray-300">Ngày lập phiếu</label>
@@ -58,12 +63,21 @@ const ImportReceiptForm = () => {
             {message.text}
           </div>
         )}
-        <button
-          type="submit"
-          className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition"
-        >
-          Tạo Phiếu
-        </button>
+        <div className="flex space-x-4">
+          <button
+            type="submit"
+            className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition"
+          >
+            Tạo Phiếu
+          </button>
+          <button
+            type="button"
+            onClick={onCancel}
+            className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition"
+          >
+            Hủy
+          </button>
+        </div>
       </form>
     </div>
   );
