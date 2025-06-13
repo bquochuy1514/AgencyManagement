@@ -1,12 +1,12 @@
 // import React, { useState, useEffect } from 'react';
-// import { addImportDetail } from '../../services/receiptService';
+// import { addExportDetail } from '../../services/receiptService';
 
-// const ImportDetailForm = ({ receiptId, receiptDetails, onClose }) => {
+// const ExportDetailForm = ({ receiptId, onClose }) => {
 //   const [formData, setFormData] = useState({
-//     importReceiptID: receiptId,
+//     exportReceiptID: receiptId,
 //     productID: '',
-//     quantityImport: 0,
-//     importPrice: 0,
+//     quantityExport: 0,
+//     exportPrice: 0,
 //     intoMoney: 0,
 //   });
 //   const [message, setMessage] = useState(null);
@@ -15,7 +15,7 @@
 //   useEffect(() => {
 //     setFormData((prev) => ({
 //       ...prev,
-//       importReceiptID: receiptId,
+//       exportReceiptID: receiptId,
 //       productID: productIndex.toString(),
 //     }));
 //   }, [receiptId, productIndex]);
@@ -23,8 +23,8 @@
 //   const handleChange = (e) => {
 //     const { name, value } = e.target;
 //     const updatedFormData = { ...formData, [name]: value };
-//     if (name === 'quantityImport' || name === 'importPrice') {
-//       updatedFormData.intoMoney = Math.max(0, parseInt(updatedFormData.quantityImport || 0) * parseInt(updatedFormData.importPrice || 0));
+//     if (name === 'quantityExport' || name === 'exportPrice') {
+//       updatedFormData.intoMoney = Math.max(0, parseInt(updatedFormData.quantityExport || 0) * parseInt(updatedFormData.exportPrice || 0));
 //     }
 //     setFormData(updatedFormData);
 //   };
@@ -32,15 +32,15 @@
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
 //     try {
-//       const response = await addImportDetail({
-//         importReceiptID: { importReceiptID: parseInt(formData.importReceiptID) },
+//       const response = await addExportDetail({
+//         exportReceiptID: { exportReceiptID: parseInt(formData.exportReceiptID) },
 //         productID: { productID: parseInt(formData.productID) },
-//         quantityImport: parseInt(formData.quantityImport),
-//         importPrice: parseInt(formData.importPrice),
+//         quantityExport: parseInt(formData.quantityExport),
+//         exportPrice: parseInt(formData.exportPrice),
 //         intoMoney: parseInt(formData.intoMoney),
 //       });
 //       setMessage({ type: 'success', text: response.message });
-//       setFormData({ ...formData, productID: (productIndex + 1).toString(), quantityImport: 0, importPrice: 0, intoMoney: 0 });
+//       setFormData({ ...formData, productID: (productIndex + 1).toString(), quantityExport: 0, exportPrice: 0, intoMoney: 0 });
 //       setProductIndex((prev) => prev + 1);
 //     } catch (error) {
 //       setMessage({ type: 'error', text: error.message });
@@ -49,40 +49,18 @@
 
 //   return (
 //     <div className="p-6 bg-[#2a3b4c] rounded-lg shadow-lg">
-//       <h3 className="text-xl font-semibold text-white mb-4">Thêm Chi Tiết Phiếu Nhập</h3>
+//       <h3 className="text-xl font-semibold text-white mb-4">Thêm Chi Tiết Phiếu Xuất</h3>
 //       <form onSubmit={handleSubmit} className="space-y-4">
 //         <div>
-//           <label className="block text-gray-300">Mã phiếu nhập</label>
+//           <label className="block text-gray-300">Mã phiếu xuất</label>
 //           <input
 //             type="number"
-//             name="importReceiptID"
-//             value={formData.importReceiptID}
+//             name="exportReceiptID"
+//             value={formData.exportReceiptID}
 //             readOnly
 //             className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md bg-gray-700"
 //           />
 //         </div>
-//         {receiptDetails && (
-//           <>
-//             <div>
-//               <label className="block text-gray-300">Ngày lập phiếu</label>
-//               <input
-//                 type="text"
-//                 value={receiptDetails.dateReceipt}
-//                 readOnly
-//                 className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md bg-gray-700"
-//               />
-//             </div>
-//             <div>
-//               <label className="block text-gray-300">Tổng giá</label>
-//               <input
-//                 type="text"
-//                 value={new Intl.NumberFormat('vi-VN').format(receiptDetails.totalPrice) + ' đ'}
-//                 readOnly
-//                 className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md bg-gray-700"
-//               />
-//             </div>
-//           </>
-//         )}
 //         <div>
 //           <label className="block text-gray-300">Mã sản phẩm</label>
 //           <input
@@ -94,22 +72,22 @@
 //           />
 //         </div>
 //         <div>
-//           <label className="block text-gray-300">Số lượng nhập</label>
+//           <label className="block text-gray-300">Số lượng xuất</label>
 //           <input
 //             type="number"
-//             name="quantityImport"
-//             value={formData.quantityImport}
+//             name="quantityExport"
+//             value={formData.quantityExport}
 //             onChange={handleChange}
 //             className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md"
 //             required
 //           />
 //         </div>
 //         <div>
-//           <label className="block text-gray-300">Giá nhập</label>
+//           <label className="block text-gray-300">Giá xuất</label>
 //           <input
 //             type="number"
-//             name="importPrice"
-//             value={formData.importPrice}
+//             name="exportPrice"
+//             value={formData.exportPrice}
 //             onChange={handleChange}
 //             className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md"
 //             required
@@ -143,17 +121,17 @@
 //   );
 // };
 
-// export default ImportDetailForm;
+// export default ExportDetailForm;
 import React, { useState, useEffect } from 'react';
 
-const ImportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
+const ExportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
   const [formData, setFormData] = useState({
-    importReceiptID: receiptId,
+    exportReceiptID: receiptId,
     productID: '',
     productName: '',
     unitName: '',
-    quantityImport: 0,
-    importPrice: 0,
+    quantityExport: 0,
+    exportPrice: 0,
     intoMoney: 0,
   });
   const [message, setMessage] = useState(null);
@@ -162,7 +140,7 @@ const ImportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
-      importReceiptID: receiptId,
+      exportReceiptID: receiptId,
       productID: productIndex.toString(),
     }));
   }, [receiptId, productIndex]);
@@ -170,15 +148,15 @@ const ImportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     const updatedFormData = { ...formData, [name]: value };
-    if (name === 'quantityImport' || name === 'importPrice') {
-      updatedFormData.intoMoney = Math.max(0, parseInt(updatedFormData.quantityImport || 0) * parseInt(updatedFormData.importPrice || 0));
+    if (name === 'quantityExport' || name === 'exportPrice') {
+      updatedFormData.intoMoney = Math.max(0, parseInt(updatedFormData.quantityExport || 0) * parseInt(updatedFormData.exportPrice || 0));
     }
     setFormData(updatedFormData);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.productName || !formData.unitName || !formData.quantityImport || !formData.importPrice) {
+    if (!formData.productName || !formData.unitName || !formData.quantityExport || !formData.exportPrice) {
       setMessage({ type: 'error', text: 'Vui lòng điền đầy đủ thông tin!' });
       return;
     }
@@ -186,19 +164,19 @@ const ImportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
       stt: productIndex,
       productName: formData.productName,
       unitName: formData.unitName,
-      quantityImport: parseInt(formData.quantityImport),
-      importPrice: parseInt(formData.importPrice),
+      quantityExport: parseInt(formData.quantityExport),
+      exportPrice: parseInt(formData.exportPrice),
       intoMoney: parseInt(formData.intoMoney),
     };
     onAddDetail(newDetail);
-    setMessage({ type: 'success', text: 'Thêm chi tiết nhập thành công!' });
+    setMessage({ type: 'success', text: 'Thêm chi tiết xuất thành công!' });
     setFormData({
-      importReceiptID: receiptId,
+      exportReceiptID: receiptId,
       productID: (productIndex + 1).toString(),
       productName: '',
       unitName: '',
-      quantityImport: 0,
-      importPrice: 0,
+      quantityExport: 0,
+      exportPrice: 0,
       intoMoney: 0,
     });
     setProductIndex(prev => prev + 1);
@@ -206,14 +184,14 @@ const ImportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
 
   return (
     <div className="p-6 bg-[#2a3b4c] rounded-lg shadow-lg">
-      <h3 className="text-xl font-semibold text-white mb-4">Thêm Chi Tiết Phiếu Nhập</h3>
+      <h3 className="text-xl font-semibold text-white mb-4">Thêm Chi Tiết Phiếu Xuất</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-gray-300">Mã phiếu nhập</label>
+          <label className="block text-gray-300">Mã phiếu xuất</label>
           <input
             type="number"
-            name="importReceiptID"
-            value={formData.importReceiptID}
+            name="exportReceiptID"
+            value={formData.exportReceiptID}
             readOnly
             className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md bg-gray-700"
           />
@@ -230,10 +208,10 @@ const ImportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
               />
             </div>
             <div>
-              <label className="block text-gray-300">Tổng giá</label>
+              <label className="block text-gray-300">Tổng tiền</label>
               <input
                 type="text"
-                value={new Intl.NumberFormat('vi-VN').format(receipt.totalPrice) + ' đ'}
+                value={new Intl.NumberFormat('vi-VN').format(receipt.totalMoney) + ' đ'}
                 readOnly
                 className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md bg-gray-700"
               />
@@ -273,22 +251,22 @@ const ImportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
           />
         </div>
         <div>
-          <label className="block text-gray-300">Số lượng nhập</label>
+          <label className="block text-gray-300">Số lượng xuất</label>
           <input
             type="number"
-            name="quantityImport"
-            value={formData.quantityImport}
+            name="quantityExport"
+            value={formData.quantityExport}
             onChange={handleChange}
             className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md"
             required
           />
         </div>
         <div>
-          <label className="block text-gray-300">Giá nhập</label>
+          <label className="block text-gray-300">Giá xuất</label>
           <input
             type="number"
-            name="importPrice"
-            value={formData.importPrice}
+            name="exportPrice"
+            value={formData.exportPrice}
             onChange={handleChange}
             className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md"
             required
@@ -322,4 +300,4 @@ const ImportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
   );
 };
 
-export default ImportDetailForm;
+export default ExportDetailForm;
