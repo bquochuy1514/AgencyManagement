@@ -270,6 +270,7 @@ const ImportReceiptForm = ({ onCancel, onSuccess }) => {
 export default ImportReceiptForm;
 
 
+
 // phần này dùng để fetch api
 // import React, { useState, useContext } from 'react';
 // import { ProductContext } from '../../App';

@@ -19,13 +19,39 @@ function App() {
     import: [],
     export: [],
   });
-  const [products, setProducts] = useState([]); // State chung cho products
+  const [products, setProducts] = useState([
+    {
+      productID: 1,
+      productName: "Sữa tươi",
+      unit: { unitID: 1, unitName: "hộp" },
+      importPrice: 6000,
+      exportPrice: 6500,
+      inventoryQuantity: 58,
+    },
+    {
+      productID: 2,
+      productName: "Nước ngọt",
+      unit: { unitID: 2, unitName: "thùng" },
+      importPrice: 120000,
+      exportPrice: 150000,
+      inventoryQuantity: 20,
+    },
+  ]);
+  const [units, setUnits] = useState([
+    { unitID: 1, unitName: "hộp" },
+    { unitID: 2, unitName: "thùng" },
+  ]);
 
   const updateReceipts = (newReceipts) => {
     setReceipts((prev) => ({ ...prev, ...newReceipts }));
   };
+
   const updateProducts = (newProducts) => {
     setProducts(newProducts);
+  };
+
+  const updateUnits = (newUnits) => {
+    setUnits(newUnits);
   };
 
   const Placeholder = ({ pageName }) => (
@@ -37,7 +63,9 @@ function App() {
 
   return (
     <ReceiptContext.Provider value={{ receipts, updateReceipts }}>
-      <ProductContext.Provider value={{ products, updateProducts }}>
+      <ProductContext.Provider
+        value={{ products, updateProducts, units, updateUnits }}
+      >
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<MainLayout />}>
