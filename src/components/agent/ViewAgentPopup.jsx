@@ -14,6 +14,7 @@ import {
 const ViewAgentPopup = ({ agent, onClose }) => {
 	if (!agent) return null;
 
+	// eslint-disable-next-line no-unused-vars
 	const InfoRow = ({ icon: Icon, label, value }) => (
 		<div className="flex items-start gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors duration-200">
 			<div className="p-2 bg-blue-100 rounded-full mt-1">

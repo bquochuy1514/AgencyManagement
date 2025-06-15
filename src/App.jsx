@@ -47,6 +47,7 @@ import ProductManagement from './pages/ProductManagement';
 import ReceiptDetails from './components/receipt/ReceiptDetails';
 import ProductDetails from './components/product/ProductDetails';
 import { ToastContainer } from 'react-toastify';
+import PaymentReceipt from './pages/PaymentReceipt';
 
 export const ReceiptContext = createContext();
 export const ProductContext = createContext();
@@ -107,7 +108,7 @@ function App() {
 							/>
 							<Route
 								path="/payments"
-								element={<Placeholder pageName="Thu tiền" />}
+								element={<PaymentReceipt />}
 							/>
 							<Route
 								path="/reports"

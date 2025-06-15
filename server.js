@@ -102,6 +102,26 @@ app.delete('/agent/deleteAgent', (req, res) => {
 	}
 });
 
+app.get('/payment/getAllPaymentReceipts', (req, res) => {
+	const db = JSON.parse(fs.readFileSync('./db.json', 'utf-8'));
+	const paymentReceipts = db.paymentReceipts || [];
+
+	if (paymentReceipts) {
+		res.json({
+			code: 200,
+			data: paymentReceipts || [],
+			message: 'Lấy danh sách phiếu thu tiền thành công',
+			status: 'success',
+		});
+	} else {
+		res.status(404).json({
+			code: 404,
+			message: 'Không tìm thấy phiếu thu tiền',
+			status: 'error',
+		});
+	}
+});
+
 app.listen(PORT, () => {
 	console.log(`Server đang chạy tại http://localhost:${PORT}`);
 });

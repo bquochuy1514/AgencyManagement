@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Scrollbar hiện đại với gradient */
 ::-webkit-scrollbar {
 	width: 12px;
 }
