@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { FaPlus, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaSearch, FaEye } from 'react-icons/fa';
 import AddAgentPopup from '../components/agent/AddAgentPopup';
 import EditAgentPopup from '../components/agent/EditAgentPopup';
 import DeleteAgentPopup from '../components/agent/DeleteAgentPopup';
+import ViewAgentPopup from '../components/agent/ViewAgentPopup';
 
 const AgentManagement = () => {
 	const [agents, setAgents] = useState([]);
@@ -11,6 +12,7 @@ const AgentManagement = () => {
 	const [editingAgent, setEditingAgent] = useState(null);
 	const [showDeletePopup, setShowDeletePopup] = useState(false);
 	const [selectedAgent, setSelectedAgent] = useState(null);
+	const [viewingAgent, setViewingAgent] = useState(null);
 
 	const fetchAgents = async () => {
 		try {
@@ -74,6 +76,13 @@ const AgentManagement = () => {
 				/>
 			)}
 
+			{viewingAgent && (
+				<ViewAgentPopup
+					agent={viewingAgent}
+					onClose={() => setViewingAgent(null)}
+				/>
+			)}
+
 			{editingAgent && (
 				<EditAgentPopup
 					agent={editingAgent}
@@ -124,7 +133,13 @@ const AgentManagement = () => {
 								<td className="py-3 px-4">
 									{agent.debtMoney?.toLocaleString('vi-VN')}₫
 								</td>
-								<td className="py-3 px-4 flex space-x-2">
+								<td className="py-3 px-4 space-x-2">
+									<button
+										onClick={() => setViewingAgent(agent)}
+										className="text-green-400 hover:text-green-300"
+									>
+										<FaEye />
+									</button>
 									<button
 										onClick={() => setEditingAgent(agent)}
 										className="text-blue-500 hover:text-blue-400"

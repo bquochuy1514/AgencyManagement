@@ -61,6 +61,20 @@
       },
       "debtMoney": "55000",
       "agentID": 4
+    },
+    {
+      "agentName": "Đại lý TNHH Không Tên",
+      "address": "Kí túc xá khu B Đại học quốc gia TPHCM",
+      "phone": "0342637682",
+      "email": "banavip12nt@gmail.com",
+      "agentTypeID": {
+        "agentTypeName": "3"
+      },
+      "districtID": {
+        "districtName": "Quận 1"
+      },
+      "debtMoney": "55000",
+      "agentID": 5
     }
   ]
 }
