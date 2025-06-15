@@ -1,13 +1,66 @@
 {
-	"posts": [
-		{ "id": "1", "title": "a title", "views": 100 },
-		{ "id": "2", "title": "another title", "views": 200 }
-	],
-	"comments": [
-		{ "id": "1", "text": "a comment about post 1", "postId": "1" },
-		{ "id": "2", "text": "another comment about post 1", "postId": "1" }
-	],
-	"profile": {
-		"name": "typicode"
-	}
+  "agents": [
+    {
+      "agentID": 1,
+      "agentName": "Anh Quan Vinamilk",
+      "address": "137, Hoang Hoa Tham, KCN Binh Duong",
+      "phone": "0180006868",
+      "email": "anhquan@gmail.com",
+      "agentTypeID": {
+        "agentTypeID": 1,
+        "agentTypeName": "Loại 1",
+        "maximumDebt": 1500000000
+      },
+      "districtID": {
+        "districtID": 1,
+        "districtName": "Quận 1"
+      },
+      "debtMoney": 350000
+    },
+    {
+      "agentID": 2,
+      "agentName": "Công ty TNHH ABC",
+      "address": "123, Le Loi, Q1",
+      "phone": "0123456789",
+      "email": "abc@gmail.com",
+      "agentTypeID": {
+        "agentTypeID": 2,
+        "agentTypeName": "Loại 2",
+        "maximumDebt": 2000000000
+      },
+      "districtID": {
+        "districtID": 2,
+        "districtName": "Quận 2"
+      },
+      "debtMoney": 450000
+    },
+    {
+      "agentName": "ádasd",
+      "address": "Kí túc xá khu B Đại học quốc gia TPHCM",
+      "phone": "0342637682",
+      "email": "banavip12nt@gmail.com",
+      "agentTypeID": {
+        "agentTypeName": "3"
+      },
+      "districtID": {
+        "districtName": "Quận 1"
+      },
+      "debtMoney": "55000",
+      "agentID": 3
+    },
+    {
+      "agentName": "âfsasf",
+      "address": "Kí túc xá khu B Đại học quốc gia TPHCM",
+      "phone": "0342637682",
+      "email": "banavip12nt@gmail.com",
+      "agentTypeID": {
+        "agentTypeName": "3"
+      },
+      "districtID": {
+        "districtName": "Quận 1"
+      },
+      "debtMoney": "55000",
+      "agentID": 4
+    }
+  ]
 }

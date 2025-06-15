@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaUsers, FaMoneyCheckAlt, FaBox, FaChartLine } from 'react-icons/fa';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 
 const HomePage = () => {
+	const [agents, setAgents] = useState([]);
+
 	const cardVariants = {
 		hidden: { opacity: 0, y: 20 },
 		visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
@@ -13,6 +15,24 @@ const HomePage = () => {
 		hidden: { opacity: 0, x: -20 },
 		visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
 	};
+
+	useEffect(() => {
+		const fetchAgents = async () => {
+			try {
+				const response = await fetch(
+					'http://localhost:3001/agent/getAllAgents' // thay URL này đúng với data của m
+				);
+				const data = await response.json();
+
+				if (data.code === 200) {
+					setAgents(data.data);
+				}
+			} catch (error) {
+				console.error('Lỗi khi gọi API:', error);
+			}
+		};
+		fetchAgents();
+	}, []);
 
 	return (
 		<div className="p-6 bg-gray-900 min-h-screen text-white">
@@ -117,20 +137,30 @@ const HomePage = () => {
 							<tr className="border-b border-gray-700">
 								<th className="py-2">Tên Đại Lý</th>
 								<th className="py-2">Doanh Thu</th>
-								<th className="py-2">Hàng Xuất</th>
+								<th className="py-2">Quận</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr className="border-b border-gray-700">
-								<td className="py-2">Đại Lý A</td>
-								<td className="py-2">1.2 Tỷ</td>
-								<td className="py-2">600</td>
-							</tr>
-							<tr className="border-b border-gray-700">
-								<td className="py-2">Đại Lý B</td>
-								<td className="py-2">0.9 Tỷ</td>
-								<td className="py-2">450</td>
-							</tr>
+							{agents.map((agent, index) => (
+								<tr
+									key={agent.agentID}
+									className={`border-b border-gray-700 ${
+										index % 2 === 0 ? 'bg-gray-900' : ''
+									}`}
+								>
+									<td className="py-2">{agent.agentName}</td>
+									<td className="py-2">
+										{agent.debtMoney?.toLocaleString(
+											'vi-VN'
+										)}{' '}
+										đ
+									</td>
+									<td className="py-2">
+										{agent.districtID?.districtName ||
+											'---'}
+									</td>
+								</tr>
+							))}
 						</tbody>
 					</table>
 				</div>
