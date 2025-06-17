@@ -12,7 +12,11 @@ import { ToastContainer } from "react-toastify";
 import PaymentReceipt from "./pages/PaymentReceipt";
 
 export const ReceiptContext = createContext();
-export const ProductContext = createContext();
+export const ProductContext = createContext({
+  products: [],
+  units: [],
+  updateProducts: () => {},
+});
 
 function App() {
   const [receipts, setReceipts] = useState({
