@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const AddReceiptPopup = ({ onClose, onAdded }) => {
 	const [agents, setAgents] = useState([]);
@@ -38,11 +39,14 @@ const AddReceiptPopup = ({ onClose, onAdded }) => {
 				}
 			);
 			if (res.ok) {
+				// eslint-disable-next-line no-undef
+				toast.success('Thêm phiếu thu tiền thành công');
 				onAdded();
 				onClose();
 			}
 		} catch (err) {
 			console.error('Lỗi khi thêm phiếu thu:', err);
+			toast.error('Có lỗi khi thêm phiếu thu tiền');
 		}
 	};
 

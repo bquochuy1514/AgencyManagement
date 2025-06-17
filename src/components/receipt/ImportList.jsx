@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ImportList = ({ receipts, onDelete, onShowDetailAdd, onShowDetailView }) => {
+const ImportList = ({ receipts, onDelete, onShowDetailView }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -30,27 +30,8 @@ const ImportList = ({ receipts, onDelete, onShowDetailAdd, onShowDetailView }) =
             <tr key={receipt.importReceiptID} className="border-t border-gray-700">
               <td className="px-4 py-3">{receipt.importReceiptID}</td>
               <td className="px-4 py-3">{new Date(receipt.dateReceipt).toLocaleDateString()}</td>
-              <td className="px-4 py-3">{new Intl.NumberFormat('vi-VN').format(receipt.totalMoney)} đ</td>
+              <td className="px-4 py-3">{new Intl.NumberFormat('vi-VN').format(receipt.totalPrice)} đ</td>
               <td className="px-4 py-3 flex space-x-2">
-                <button
-                  onClick={() => onShowDetailAdd(receipt.importReceiptID)}
-                  className="text-blue-400 hover:text-blue-500"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                    />
-                  </svg>
-                </button>
                 <button
                   onClick={() => onShowDetailView(receipt.importReceiptID)}
                   className="text-green-400 hover:text-green-500"

@@ -144,14 +144,15 @@
 // };
 
 // export default ImportDetailForm;
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { ProductContext } from '../../App';
 
 const ImportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
+  const { products, units } = useContext(ProductContext);
   const [formData, setFormData] = useState({
     importReceiptID: receiptId,
     productID: '',
-    productName: '',
-    unitName: '',
+    unitID: '',
     quantityImport: 0,
     importPrice: 0,
     intoMoney: 0,
@@ -163,7 +164,8 @@ const ImportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
     setFormData((prev) => ({
       ...prev,
       importReceiptID: receiptId,
-      productID: productIndex.toString(),
+      productID: '',
+      unitID: '',
     }));
   }, [receiptId, productIndex]);
 
@@ -178,14 +180,18 @@ const ImportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.productName || !formData.unitName || !formData.quantityImport || !formData.importPrice) {
+    if (!formData.productID || !formData.unitID || !formData.quantityImport || !formData.importPrice) {
       setMessage({ type: 'error', text: 'Vui lòng điền đầy đủ thông tin!' });
       return;
     }
+    const product = products.find(p => p.productID === parseInt(formData.productID));
+    const unit = units.find(u => u.unitID === parseInt(formData.unitID));
     const newDetail = {
       stt: productIndex,
-      productName: formData.productName,
-      unitName: formData.unitName,
+      productID: parseInt(formData.productID),
+      productName: product?.productName || '',
+      unitID: parseInt(formData.unitID),
+      unitName: unit?.unitName || '',
       quantityImport: parseInt(formData.quantityImport),
       importPrice: parseInt(formData.importPrice),
       intoMoney: parseInt(formData.intoMoney),
@@ -194,9 +200,8 @@ const ImportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
     setMessage({ type: 'success', text: 'Thêm chi tiết nhập thành công!' });
     setFormData({
       importReceiptID: receiptId,
-      productID: (productIndex + 1).toString(),
-      productName: '',
-      unitName: '',
+      productID: '',
+      unitID: '',
       quantityImport: 0,
       importPrice: 0,
       intoMoney: 0,
@@ -241,36 +246,32 @@ const ImportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
           </>
         )}
         <div>
-          <label className="block text-gray-300">Mã sản phẩm</label>
-          <input
-            type="text"
+          <label className="block text-gray-300">Sản phẩm</label>
+          <select
             name="productID"
             value={formData.productID}
-            readOnly
-            className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md bg-gray-700"
-          />
-        </div>
-        <div>
-          <label className="block text-gray-300">Tên sản phẩm</label>
-          <input
-            type="text"
-            name="productName"
-            value={formData.productName}
             onChange={handleChange}
             className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md"
-            required
-          />
+          >
+            <option value="">Chọn sản phẩm</option>
+            {products.map(product => (
+              <option key={product.productID} value={product.productID}>{product.productName}</option>
+            ))}
+          </select>
         </div>
         <div>
           <label className="block text-gray-300">Đơn vị tính</label>
-          <input
-            type="text"
-            name="unitName"
-            value={formData.unitName}
+          <select
+            name="unitID"
+            value={formData.unitID}
             onChange={handleChange}
             className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md"
-            required
-          />
+          >
+            <option value="">Chọn đơn vị</option>
+            {units.map(unit => (
+              <option key={unit.unitID} value={unit.unitID}>{unit.unitName}</option>
+            ))}
+          </select>
         </div>
         <div>
           <label className="block text-gray-300">Số lượng nhập</label>
@@ -323,3 +324,6 @@ const ImportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
 };
 
 export default ImportDetailForm;
+
+
+

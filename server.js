@@ -8,9 +8,19 @@ const PORT = 3001;
 
 app.use(cors());
 app.use(bodyParser.json());
+
+// Helper functions
+const readDB = () => {
+	return JSON.parse(fs.readFileSync('./db.json', 'utf-8'));
+};
+
+const writeDB = (data) => {
+	fs.writeFileSync('./db.json', JSON.stringify(data, null, 2), 'utf-8');
+};
+
 // Lấy danh sách đại lý
 app.get('/agent/getAllAgents', (req, res) => {
-	const db = JSON.parse(fs.readFileSync('./db.json', 'utf-8'));
+	const db = readDB();
 	res.json({
 		code: 200,
 		data: db.agents || [],
@@ -22,14 +32,15 @@ app.get('/agent/getAllAgents', (req, res) => {
 // Thêm đại lý mới
 app.post('/agent/addAgent', (req, res) => {
 	const newAgent = req.body;
-	const db = JSON.parse(fs.readFileSync('./db.json', 'utf-8'));
+	const db = readDB();
 	const agents = db.agents || [];
 
 	newAgent.agentID =
 		agents.length > 0 ? agents[agents.length - 1].agentID + 1 : 1;
 	agents.push(newAgent);
 
-	fs.writeFileSync('./db.json', JSON.stringify({ agents }, null, 2), 'utf-8');
+	db.agents = agents;
+	writeDB(db);
 
 	res.status(201).json({
 		code: 200,
@@ -41,16 +52,13 @@ app.post('/agent/addAgent', (req, res) => {
 
 app.put('/agent/updateDebt', (req, res) => {
 	const agent = req.body;
-	const db = JSON.parse(fs.readFileSync('./db.json', 'utf-8'));
+	const db = readDB();
 	const agents = db.agents || [];
 	const index = agents.findIndex((a) => a.agentID === agent.agentID);
 	if (index !== -1) {
 		agents[index].debtMoney = parseInt(agent.debtMoney);
-		fs.writeFileSync(
-			'./db.json',
-			JSON.stringify({ agents }, null, 2),
-			'utf-8'
-		);
+		db.agents = agents;
+		writeDB(db);
 		res.json({
 			code: 200,
 			data: agents[index],
@@ -77,16 +85,13 @@ app.delete('/agent/deleteAgent', (req, res) => {
 		});
 	}
 
-	const db = JSON.parse(fs.readFileSync('./db.json', 'utf-8'));
+	const db = readDB();
 	const agents = db.agents || [];
 	const index = agents.findIndex((a) => a.agentID === agentID);
 	if (index !== -1) {
 		agents.splice(index, 1);
-		fs.writeFileSync(
-			'./db.json',
-			JSON.stringify({ agents }, null, 2),
-			'utf-8'
-		);
+		db.agents = agents;
+		writeDB(db);
 		res.json({
 			code: 200,
 			message: 'Xóa đại lý thành công',
@@ -105,20 +110,12 @@ app.get('/paymentReceipt/getAllPaymentReceipts', (req, res) => {
 	const db = JSON.parse(fs.readFileSync('./db.json', 'utf-8'));
 	const paymentReceipts = db.paymentReceipts || [];
 
-	if (paymentReceipts) {
-		res.json({
-			code: 200,
-			data: paymentReceipts || [],
-			message: 'Lấy danh sách phiếu thu tiền thành công',
-			status: 'success',
-		});
-	} else {
-		res.status(404).json({
-			code: 404,
-			message: 'Không tìm thấy phiếu thu tiền',
-			status: 'error',
-		});
-	}
+	res.json({
+		code: 200,
+		data: paymentReceipts,
+		message: 'Lấy danh sách phiếu thu tiền thành công',
+		status: 'success',
+	});
 });
 
 app.post('/paymentReceipt/addPaymentReceipt', (req, res) => {

@@ -94,7 +94,7 @@
 // };
 
 // export default ReceiptDetails;
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ReceiptContext } from '../../App';
 
@@ -103,28 +103,20 @@ const ReceiptDetails = () => {
   const navigate = useNavigate();
   const { receipts } = useContext(ReceiptContext);
 
-  useEffect(() => {
-    if (!receipts || !receipts[type] || !receipts[type].find(r => (type === 'import' ? r.importReceiptID : r.exportReceiptID) === parseInt(receiptId))) {
-      console.log(`Không tìm thấy phiếu ${type} với ID ${receiptId}. Dữ liệu receipts:`, receipts);
-    }
-  }, [receipts, receiptId, type]);
-
   const receipt = type === 'import'
-    ? receipts[type]?.find(r => r.importReceiptID === parseInt(receiptId))
-    : receipts[type]?.find(r => r.exportReceiptID === parseInt(receiptId));
+    ? receipts.import?.find(r => r.importReceiptID === parseInt(receiptId))
+    : null;
   const totalMoney = receipt?.details.reduce((sum, item) => sum + item.intoMoney, 0) || 0;
 
   const handleExport = () => {
-    alert(`Xuất file ${type === 'import' ? 'Phiếu Nhập' : 'Phiếu Xuất'} ID ${receiptId} thành công! (Chức năng mô phỏng)`);
+    alert(`Xuất file Phiếu Nhập ID ${receiptId} thành công! (Chức năng mô phỏng)`);
   };
 
   if (!receipt) return <div className="p-6 text-red-300">Không tìm thấy phiếu. Vui lòng kiểm tra lại ID hoặc thêm phiếu mới.</div>;
 
   return (
     <div className="p-6 bg-gray-800 text-white min-h-screen">
-      <h2 className="text-2xl font-bold mb-4 text-blue-400">
-        Chi tiết phiếu {type === 'import' ? 'nhập' : 'xuất'}
-      </h2>
+      <h2 className="text-2xl font-bold mb-4 text-blue-400">Chi tiết phiếu nhập</h2>
       <div className="bg-gray-700 p-6 rounded-lg shadow-lg max-w-3xl mx-auto">
         <div className="bg-gray-800 p-4 rounded-t-lg border-b border-gray-700">
           <div className="flex justify-between text-gray-300">
@@ -132,7 +124,7 @@ const ReceiptDetails = () => {
               <label className="block">Số phiếu:</label>
               <input
                 type="text"
-                value={type === 'import' ? receipt.importReceiptID : receipt.exportReceiptID}
+                value={receipt.importReceiptID}
                 readOnly
                 className="bg-gray-800 text-white ml-2 w-32 border-none focus:outline-none"
               />
@@ -147,19 +139,6 @@ const ReceiptDetails = () => {
               />
             </div>
           </div>
-          {type === 'export' && (
-            <div className="flex justify-between text-gray-300 mt-2">
-              <div>
-                <label className="block">Đại lý:</label>
-                <input
-                  type="text"
-                  value={receipt.agentID || 'Chưa có'}
-                  readOnly
-                  className="bg-gray-800 text-white ml-2 w-32 border-none focus:outline-none"
-                />
-              </div>
-            </div>
-          )}
         </div>
         <div className="overflow-x-auto mt-4">
           <table className="min-w-full divide-y divide-gray-700">
@@ -179,9 +158,9 @@ const ReceiptDetails = () => {
                   <td className="px-4 py-3">{item.stt}</td>
                   <td className="px-4 py-3">{item.productName}</td>
                   <td className="px-4 py-3">{item.unitName}</td>
-                  <td className="px-4 py-3">{type === 'import' ? item.quantityImport : item.quantityExport}</td>
+                  <td className="px-4 py-3">{item.quantityImport}</td>
                   <td className="px-4 py-3">
-                    {new Intl.NumberFormat('vi-VN').format(type === 'import' ? item.importPrice : item.exportPrice)} đ
+                    {new Intl.NumberFormat('vi-VN').format(item.importPrice)} đ
                   </td>
                   <td className="px-4 py-3">
                     {new Intl.NumberFormat('vi-VN').format(item.intoMoney)} đ
@@ -202,28 +181,6 @@ const ReceiptDetails = () => {
                 className="bg-gray-800 text-white ml-2 w-32 border-none focus:outline-none"
               />
             </div>
-            {type === 'export' && (
-              <>
-                <div>
-                  <label className="block">Số tiền trả:</label>
-                  <input
-                    type="text"
-                    value={new Intl.NumberFormat('vi-VN').format(receipt.paymentAmount) + ' đ'}
-                    readOnly
-                    className="bg-gray-800 text-white ml-2 w-32 border-none focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block">Còn lại:</label>
-                  <input
-                    type="text"
-                    value={new Intl.NumberFormat('vi-VN').format(receipt.remainAmount) + ' đ'}
-                    readOnly
-                    className="bg-gray-800 text-white ml-2 w-32 border-none focus:outline-none"
-                  />
-                </div>
-              </>
-            )}
           </div>
         </div>
         <div className="flex justify-end mt-4 space-x-4">
@@ -246,3 +203,104 @@ const ReceiptDetails = () => {
 };
 
 export default ReceiptDetails;
+
+
+
+
+
+// phần này dùng để fetchapi 
+// import React, { useState, useEffect } from 'react';
+// import { useParams } from 'react-router-dom';
+// import { getImportReceiptById, getImportDetailByReceiptId } from '../../services/receiptService';
+
+// const ReceiptDetails = () => {
+//   const { type, receiptId } = useParams();
+//   const [receipt, setReceipt] = useState(null);
+//   const [details, setDetails] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+
+//   useEffect(() => {
+//     const fetchReceiptDetails = async () => {
+//       if (type !== 'import') {
+//         setError('Loại phiếu không hợp lệ.');
+//         setLoading(false);
+//         return;
+//       }
+
+//       try {
+//         const receiptResult = await getImportReceiptById(receiptId);
+//         const detailsResult = await getImportDetailByReceiptId(receiptId);
+//         setReceipt({
+//           ...receiptResult.data,
+//           totalPrice: detailsResult.data.reduce((sum, d) => sum + d.intoMoney, receiptResult.data.intoMoney),
+//           details: detailsResult.data.map((d, index) => ({
+//             ...d,
+//             stt: index + 1,
+//           })),
+//         });
+//         setDetails(detailsResult.data);
+//         setLoading(false);
+//       } catch (error) {
+//         console.error('Lỗi khi fetch chi tiết phiếu nhập:', error);
+//         setError('Không thể tải chi tiết phiếu nhập.');
+//         setLoading(false);
+//       }
+//     };
+//     fetchReceiptDetails();
+//   }, [receiptId, type]);
+
+//   if (loading) {
+//     return <div className="text-white text-center py-12">Đang tải...</div>;
+//   }
+
+//   if (error) {
+//     return <div className="text-red-400 text-center py-12">{error}</div>;
+//   }
+
+//   if (!receipt) {
+//     return <div className="text-white text-center py-12">Không tìm thấy phiếu nhập.</div>;
+//   }
+
+//   return (
+//     <div className="p-6 bg-[#1a2634] rounded-lg min-h-screen">
+//       <h2 className="text-2xl font-semibold text-white mb-6">CHI TIẾT PHIẾU NHẬP</h2>
+//       <div className="bg-[#2c3e50] p-6 rounded-lg shadow-lg mb-6">
+//         <p className="text-white mb-2"><strong>Mã phiếu nhập:</strong> {receipt.importReceiptID}</p>
+//         <p className="text-white mb-2"><strong>Ngày nhập:</strong> {receipt.dateReceipt}</p>
+//         <p className="text-white mb-2"><strong>Tổng tiền:</strong> {receipt.totalPrice.toLocaleString()} VNĐ</p>
+//       </div>
+//       <h3 className="text-xl font-semibold text-white mb-4">Danh sách mặt hàng</h3>
+//       <div className="overflow-x-auto">
+//         <table className="min-w-full bg-[#2c3e50] rounded-lg">
+//           <thead>
+//             <tr>
+//               <th className="px-6 py-3 text-left text-white font-semibold">STT</th>
+//               <th className="px-6 py-3 text-left text-white font-semibold">Mã sản phẩm</th>
+//               <th className="px-6 py-3 text-left text-white font-semibold">Tên sản phẩm</th>
+//               <th className="px-6 py-3 text-left text-white font-semibold">Đơn vị</th>
+//               <th className="px-6 py-3 text-left text-white font-semibold">Số lượng</th>
+//               <th className="px-6 py-3 text-left text-white font-semibold">Giá nhập</th>
+//               <th className="px-6 py-3 text-left text-white font-semibold">Thành tiền</th>
+//             </tr>
+//           </thead>
+//           <tbody>
+//             {details.map((detail) => (
+//               <tr key={detail.stt} className="border-t border-gray-600">
+//                 <td className="px-6 py-4 text-white">{detail.stt}</td>
+//                 <td className="px-6 py-4 text-white">{detail.productID}</td>
+//                 <td className="px-6 py-4 text-white">{detail.productName}</td>
+//                 <td className="px-6 py-4 text-white">{detail.unitName}</td>
+//                 <td className="px-6 py-4 text-white">{detail.quantityImport}</td>
+//                 <td className="px-6 py-4 text-white">{detail.importPrice.toLocaleString()} VNĐ</td>
+//                 <td className="px-6 py-4 text-white">{detail.intoMoney.toLocaleString()} VNĐ</td>
+//               </tr>
+//             ))}
+//           </tbody>
+//         </table>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ReceiptDetails;
