@@ -164,5 +164,37 @@
         "revenue": 1125125
       }
     }
+  ],
+  "debtReports": [
+    {
+      "debtReportID": "1",
+      "month": 6,
+      "year": 2025,
+      "agentID": 1,
+      "agentName": "Anh Quan Vinamilk",
+      "firstDebt": 1000000,
+      "arisenDebt": 500000,
+      "lastDebt": 1500000
+    },
+    {
+      "debtReportID": "2",
+      "month": 4,
+      "year": 2023,
+      "agentID": 1,
+      "agentName": "Anh Quan Vinamilk",
+      "firstDebt": 1000000,
+      "arisenDebt": 500000,
+      "lastDebt": 1500000
+    },
+    {
+      "debtReportID": "3",
+      "month": 3,
+      "year": 2023,
+      "agentID": 4,
+      "agentName": "âfsasf",
+      "firstDebt": 1000000,
+      "arisenDebt": 500000,
+      "lastDebt": 1500000
+    }
   ]
 }

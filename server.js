@@ -176,6 +176,100 @@ app.post('/paymentReceipt/addPaymentReceipt', (req, res) => {
 	});
 });
 
+app.get('/debtReport/getDebtReport', (req, res) => {
+	const { month, year } = req.query;
+
+	if (!month || !year) {
+		return res.status(400).json({
+			code: 400,
+			data: [],
+			message: 'Thiếu tháng hoặc năm',
+			status: 'error',
+		});
+	}
+
+	fs.readFile('db.json', 'utf-8', (err, data) => {
+		if (err) {
+			console.error('Lỗi đọc db.json:', err);
+			return res.status(500).json({
+				code: 500,
+				data: [],
+				message: 'Lỗi server',
+				status: 'error',
+			});
+		}
+
+		const db = JSON.parse(data);
+		const reports = db.debtReports || [];
+
+		const filtered = reports.filter(
+			(r) => r.month === parseInt(month) && r.year === parseInt(year)
+		);
+
+		return res.json({
+			code: 200,
+			data: filtered,
+			message: 'Lấy báo cáo công nợ thành công',
+			status: 'success',
+		});
+	});
+});
+
+app.post('/debtReport/addDebtReport', (req, res) => {
+	const { agentID, month, year } = req.body;
+	const dbPath = './db.json';
+	const db = JSON.parse(fs.readFileSync(dbPath, 'utf-8'));
+
+	if (!agentID || !month || !year) {
+		return res.status(400).json({
+			code: 400,
+			status: 'error',
+			message: 'Thiếu thông tin cần thiết',
+		});
+	}
+
+	const agents = db.agents || [];
+	const agent = agents.find((a) => a.agentID === agentID);
+	if (!agent) {
+		return res.status(404).json({
+			code: 404,
+			status: 'error',
+			message: 'Không tìm thấy đại lý',
+		});
+	}
+
+	// Tìm id mới: max current id + 1, nhưng vẫn là chuỗi
+	const debtReports = db.debtReports || [];
+	const maxID = debtReports.reduce((max, r) => {
+		const id = parseInt(r.debtReportID, 10);
+		return id > max ? id : max;
+	}, 0);
+	const nextID = (maxID + 1).toString();
+
+	// Tạo báo cáo công nợ mới
+	const newDebtReport = {
+		debtReportID: nextID,
+		month,
+		year,
+		agentID: agent.agentID,
+		agentName: agent.agentName,
+		firstDebt: 1000000,
+		arisenDebt: 500000,
+		lastDebt: 1500000,
+	};
+
+	// Thêm vào mảng và ghi lại file db.json
+	db.debtReports.push(newDebtReport);
+	fs.writeFileSync(dbPath, JSON.stringify(db, null, 2), 'utf-8');
+
+	res.status(201).json({
+		code: 201,
+		status: 'success',
+		message: 'Tạo báo cáo công nợ thành công',
+		data: newDebtReport,
+	});
+});
+
 app.listen(PORT, () => {
 	console.log(`Server đang chạy tại http://localhost:${PORT}`);
 });
