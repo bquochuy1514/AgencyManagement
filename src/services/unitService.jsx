@@ -1,8 +1,9 @@
+
 const BASE_URL = 'http://localhost:8080';
 
 export const getAllUnits = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/api/units/thùng`, {
+    const response = await fetch(`${BASE_URL}/api/units`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
