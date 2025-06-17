@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { ProductContext } from "../../App";
 import { addImportReceipt, addImportDetail } from "../../services/receiptService";
 import { getAllProducts } from "../../services/productService";
@@ -6,22 +6,37 @@ import { getAllUnits } from "../../services/unitService";
 import { toast } from "react-toastify";
 
 const ImportReceiptForm = ({ onCancel, onSuccess }) => {
-  const { products, units } = useContext(ProductContext);
+  const [products, setProducts] = useState([]);
+  const [units, setUnits] = useState([]);
+  const [errors, setErrors] = useState({});
+
   const [receiptData, setReceiptData] = useState({
     dateReceipt: new Date().toISOString().split("T")[0],
     details: [{ productID: "", unitID: "", quantityImport: 0, importPrice: 0 }],
   });
-  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const productsRes = await getAllProducts();
+        const unitsRes = await getAllUnits();
+        console.log("📦 Units:", unitsRes.data);
+        setProducts(productsRes.data);
+        setUnits(unitsRes.data);
+      } catch (err) {
+        toast.error("Lỗi khi tải dữ liệu sản phẩm hoặc đơn vị.");
+        console.error(err);
+      }
+    };
+    fetchData();
+  }, []);
 
   const validateForm = () => {
     const newErrors = {};
-    if (!receiptData.dateReceipt)
-      newErrors.dateReceipt = "Ngày lập phiếu không được để trống";
+    if (!receiptData.dateReceipt) newErrors.dateReceipt = "Ngày lập phiếu không được để trống";
     receiptData.details.forEach((detail, index) => {
-      if (!detail.productID)
-        newErrors[`productID_${index}`] = "Vui lòng chọn sản phẩm";
-      if (!detail.unitID)
-        newErrors[`unitID_${index}`] = "Vui lòng chọn đơn vị";
+      if (!detail.productID) newErrors[`productID_${index}`] = "Vui lòng chọn sản phẩm";
+      if (!detail.unitID) newErrors[`unitID_${index}`] = "Vui lòng chọn đơn vị";
       if (!detail.quantityImport || detail.quantityImport <= 0)
         newErrors[`quantityImport_${index}`] = "Số lượng phải lớn hơn 0";
       if (!detail.importPrice || detail.importPrice <= 0)
@@ -41,10 +56,7 @@ const ImportReceiptForm = ({ onCancel, onSuccess }) => {
   const addDetail = () => {
     setReceiptData({
       ...receiptData,
-      details: [
-        ...receiptData.details,
-        { productID: "", unitID: "", quantityImport: 0, importPrice: 0 },
-      ],
+      details: [...receiptData.details, { productID: "", unitID: "", quantityImport: 0, importPrice: 0 }],
     });
   };
 
@@ -62,39 +74,33 @@ const ImportReceiptForm = ({ onCancel, onSuccess }) => {
     }
 
     try {
-      // Tạo phiếu nhập với chi tiết đầu tiên
-      const firstDetail = receiptData.details[0];
-      const receiptResponse = await addImportReceipt({
+      const first = receiptData.details[0];
+      const res = await addImportReceipt({
         dateReceipt: receiptData.dateReceipt,
-        productID: parseInt(firstDetail.productID),
-        unitID: parseInt(firstDetail.unitID),
-        quantityImport: parseInt(firstDetail.quantityImport),
-        importPrice: parseInt(firstDetail.importPrice),
+        productID: parseInt(first.productID),
+        unitID: parseInt(first.unitID),
+        quantityImport: parseInt(first.quantityImport),
+        importPrice: parseInt(first.importPrice),
       });
 
-      const receiptId = receiptResponse.data.importReceiptID;
+      const receiptId = res.data.importReceiptID;
+      const detailRes = await addImportDetail(
+        receiptData.details.map((d) => ({
+          importReceiptID: { importReceiptID: receiptId },
+          productID: { productID: parseInt(d.productID) },
+          unitID: { unitID: parseInt(d.unitID) },
+          quantityImport: parseInt(d.quantityImport),
+          importPrice: parseInt(d.importPrice),
+        }))
+      );
 
-      // Chuẩn bị mảng chi tiết để gửi
-      const detailsData = receiptData.details.map((detail) => ({
-        importReceiptID: { importReceiptID: receiptId },
-        productID: { productID: parseInt(detail.productID) },
-        unitID: { unitID: parseInt(detail.unitID) },
-        quantityImport: parseInt(detail.quantityImport),
-        importPrice: parseInt(detail.importPrice),
-      }));
-
-      // Gửi mảng chi tiết
-      const detailResponse = await addImportDetail(detailsData);
-      if (detailResponse.status === "CREATED") {
-        const totalPrice = detailResponse.data.reduce(
-          (sum, item) => sum + item.intoMoney,
-          0
-        );
+      if (detailRes.status === "CREATED") {
+        const totalPrice = detailRes.data.reduce((sum, item) => sum + item.intoMoney, 0);
         onSuccess({
           importReceiptID: receiptId,
           dateReceipt: receiptData.dateReceipt,
           totalPrice,
-          details: detailResponse.data.map((item, index) => ({
+          details: detailRes.data.map((item, index) => ({
             stt: index + 1,
             productID: item.productID,
             productName: item.productName,
@@ -113,11 +119,10 @@ const ImportReceiptForm = ({ onCancel, onSuccess }) => {
         setErrors({});
       }
     } catch (err) {
-      console.error("Lỗi khi thêm phiếu nhập:", err);
-      toast.error("Thêm phiếu nhập thất bại. Vui lòng thử lại!");
+      toast.error("Lỗi khi thêm phiếu nhập!");
+      console.error(err);
     }
   };
-
   return (
     <div className="bg-[#2a3b4c] rounded-lg shadow-md p-6 text-white">
       <h2 className="text-2xl font-semibold mb-4">Thêm Phiếu Nhập Mới</h2>
