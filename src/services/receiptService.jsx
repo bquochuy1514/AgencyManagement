@@ -1,6 +1,6 @@
 // const BASE_URL = 'http://localhost:8080';
 
-// // Import Receipt APIs
+// // Lấy danh sách phiếu nhập theo ngày
 // export const getAllImportReceipts = async (dateReceipt = new Date().toISOString().split('T')[0]) => {
 //   try {
 //     const response = await fetch(`${BASE_URL}/importReceiptbyImportDate?dateReceipt=${dateReceipt}`, {
@@ -16,6 +16,7 @@
 //   }
 // };
 
+// // Tạo phiếu nhập mới
 // export const addImportReceipt = async (data) => {
 //   try {
 //     const response = await fetch(`${BASE_URL}/importReceipt/addImportReceipt`, {
@@ -32,6 +33,7 @@
 //   }
 // };
 
+// // Lấy chi tiết phiếu nhập theo ID
 // export const getImportReceiptById = async (importReceiptId) => {
 //   try {
 //     const response = await fetch(`${BASE_URL}/importReceiptbyID?importReceiptID=${importReceiptId}`, {
@@ -47,12 +49,13 @@
 //   }
 // };
 
+// // Thêm chi tiết mặt hàng vào phiếu nhập
 // export const addImportDetail = async (data) => {
 //   try {
 //     const response = await fetch(`${BASE_URL}/importDetail/addImportDetail`, {
 //       method: 'POST',
 //       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify([data]), // API yêu cầu mảng
+//       body: JSON.stringify(data),
 //     });
 //     if (!response.ok) throw new Error(`Không thể tạo chi tiết nhập: ${response.status}`);
 //     const result = await response.json();
@@ -63,6 +66,7 @@
 //   }
 // };
 
+// // Lấy danh sách chi tiết mặt hàng theo phiếu nhập
 // export const getImportDetailByReceiptId = async (importReceiptId) => {
 //   try {
 //     const response = await fetch(`${BASE_URL}/importDetailbyImportReceiptID?importReceiptID=${importReceiptId}`, {
@@ -78,163 +82,126 @@
 //   }
 // };
 
-// export const getImportDetailByProductId = async (productId) => {
+// // Xóa phiếu nhập
+// export const deleteImportReceipt = async (importReceiptId) => {
 //   try {
-//     const response = await fetch(`${BASE_URL}/importDetailbyProductID?productID=${productId}`, {
-//       method: 'GET',
+//     const response = await fetch(`${BASE_URL}/importReceipt/delete?importReceiptID=${importReceiptId}`, {
+//       method: 'DELETE',
 //       headers: { 'Content-Type': 'application/json' },
 //     });
-//     if (!response.ok) throw new Error(`Không thể lấy chi tiết nhập theo sản phẩm: ${response.status}`);
+//     if (!response.ok) throw new Error(`Không thể xóa phiếu nhập: ${response.status}`);
 //     const result = await response.json();
-//     return { status: result.status, data: result.data || [], message: result.message };
+//     return { status: result.status, message: result.message };
 //   } catch (err) {
-//     console.error('Lỗi getImportDetailByProductId:', err.message);
+//     console.error('Lỗi deleteImportReceipt:', err.message);
 //     throw err;
 //   }
 // };
 
-// export const getImportDetailByReceiptAndProduct = async (importReceiptId, productId) => {
-//   try {
-//     const response = await fetch(`${BASE_URL}/importDetailbyImportReceiptIDandProductID?importReceiptID=${importReceiptId}&productID=${productId}`, {
-//       method: 'GET',
-//       headers: { 'Content-Type': 'application/json' },
-//     });
-//     if (!response.ok) throw new Error(`Không thể lấy chi tiết nhập theo phiếu và sản phẩm: ${response.status}`);
-//     const result = await response.json();
-//     return { status: result.status, data: result.data, message: result.message };
-//   } catch (err) {
-//     console.error('Lỗi getImportDetailByReceiptAndProduct:', err.message);
-//     throw err;
-//   }
-// };
 
-// // Export Receipt APIs
-// export const getAllExportReceipts = async (dateReceipt = new Date().toISOString().split('T')[0]) => {
-//   try {
-//     const response = await fetch(`${BASE_URL}/getExportReceiptByDate?dateReceipt=${dateReceipt}`, {
-//       method: 'GET',
-//       headers: { 'Content-Type': 'application/json' },
-//     });
-//     if (!response.ok) throw new Error(`Không thể lấy danh sách phiếu xuất: ${response.status}`);
-//     const result = await response.json();
-//     return { status: result.status, data: result.data || [], message: result.message };
-//   } catch (err) {
-//     console.error('Lỗi getAllExportReceipts:', err.message);
-//     throw err;
-//   }
-// };
 
-// export const addExportReceipt = async (data) => {
-//   try {
-//     const response = await fetch(`${BASE_URL}/exportReceipt/addExportReceipt`, {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify(data),
-//     });
-//     if (!response.ok) throw new Error(`Không thể tạo phiếu xuất: ${response.status}`);
-//     const result = await response.json();
-//     return { status: result.status, data: result.data, message: result.message };
-//   } catch (err) {
-//     console.error('Lỗi addExportReceipt:', err.message);
-//     throw err;
-//   }
-// };
 
-// export const getExportReceiptById = async (exportReceiptId) => {
-//   try {
-//     const response = await fetch(`${BASE_URL}/getExportReceiptById?exportReceiptId=${exportReceiptId}`, {
-//       method: 'GET',
-//       headers: { 'Content-Type': 'application/json' },
-//     });
-//     if (!response.ok) throw new Error(`Không thể lấy chi tiết phiếu xuất: ${response.status}`);
-//     const result = await response.json();
-//     return { status: result.status, data: result.data, message: result.message };
-//   } catch (err) {
-//     console.error('Lỗi getExportReceiptById:', err.message);
-//     throw err;
-//   }
-// };
 
-// export const addExportDetail = async (data) => {
-//   try {
-//     const response = await fetch(`${BASE_URL}/exportDetail/addExportDetail`, {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify(data),
-//     });
-//     if (!response.ok) throw new Error(`Không thể tạo chi tiết xuất: ${response.status}`);
-//     const result = await response.json();
-//     return { status: result.status, data: result.data, message: result.message };
-//   } catch (err) {
-//     console.error('Lỗi addExportDetail:', err.message);
-//     throw err;
-//   }
-// };
 
-// export const getExportDetailByReceiptId = async (exportReceiptId) => {
-//   try {
-//     const response = await fetch(`${BASE_URL}/getExportDetailByReceiptId?exportReceiptId=${exportReceiptId}`, {
-//       method: 'GET',
-//       headers: { 'Content-Type': 'application/json' },
-//     });
-//     if (!response.ok) throw new Error(`Không thể lấy chi tiết xuất: ${response.status}`);
-//     const result = await response.json();
-//     return { status: result.status, data: result.data || [], message: result.message };
-//   } catch (err) {
-//     console.error('Lỗi getExportDetailByReceiptId:', err.message);
-//     throw err;
-//   }
-// };
-
-// export const getExportDetailByProductId = async (productId) => {
-//   try {
-//     const response = await fetch(`${BASE_URL}/getExportDetailByProductId?productId=${productId}`, {
-//       method: 'GET',
-//       headers: { 'Content-Type': 'application/json' },
-//     });
-//     if (!response.ok) throw new Error(`Không thể lấy chi tiết xuất theo sản phẩm: ${response.status}`);
-//     const result = await response.json();
-//     return { status: result.status, data: result.data || [], message: result.message };
-//   } catch (err) {
-//     console.error('Lỗi getExportDetailByProductId:', err.message);
-//     throw err;
-//   }
-// };
-
-// export const getExportDetailByReceiptAndProduct = async (exportReceiptId, productId) => {
-//   try {
-//     const response = await fetch(`${BASE_URL}/getExportDetailByReceiptAndProduct?exportReceiptId=${exportReceiptId}&productId=${productId}`, {
-//       method: 'GET',
-//       headers: { 'Content-Type': 'application/json' },
-//     });
-//     if (!response.ok) throw new Error(`Không thể lấy chi tiết xuất theo phiếu và sản phẩm: ${response.status}`);
-//     const result = await response.json();
-//     return { status: result.status, data: result.data, message: result.message };
-//   } catch (err) {
-//     console.error('Lỗi getExportDetailByReceiptAndProduct:', err.message);
-//     throw err;
-//   }
-// };
-// export const getAllProducts = async () => {
-//   try {
-//     const response = await fetch(`${BASE_URL}/getAllProducts`, {
-//       method: 'GET',
-//       headers: { 'Content-Type': 'application/json' },
-//     });
-//     if (!response.ok) throw new Error(`Không thể lấy danh sách sản phẩm: ${response.status}`);
-//     const result = await response.json();
-//     return { status: result.status, data: result.data || [], message: result.message };
-//   } catch (err) {
-//     console.error('Lỗi getAllProducts:', err.message);
-//     throw err;
-//   }
-// };
 const BASE_URL = 'http://localhost:8080';
 
-// Lấy danh sách phiếu nhập theo ngày
-export const getAllImportReceipts = async (dateReceipt = new Date().toISOString().split('T')[0]) => {
+// Export Receipt APIs
+export const getAllExportReceipts = async (dateReceipt = new Date().toISOString().split('T')[0]) => {
   try {
-    const response = await fetch(`${BASE_URL}/importReceiptbyImportDate?dateReceipt=${dateReceipt}`, {
+    const response = await fetch(`${BASE_URL}/exportReceipt/getExportReceiptByDate?dateReceipt=${dateReceipt}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (!response.ok) throw new Error(`Không thể lấy danh sách phiếu xuất: ${response.status}`);
+    const result = await response.json();
+    return { status: result.status, data: Array.isArray(result.data) ? result.data : [result.data], message: result.message };
+  } catch (err) {
+    console.error('Lỗi getAllExportReceipts:', err.message);
+    throw err;
+  }
+};
+
+export const addExportReceipt = async (data) => {
+  try {
+    const response = await fetch(`${BASE_URL}/exportReceipt/addExportReceipt`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify([data]),
+    });
+    if (!response.ok) throw new Error(`Không thể tạo phiếu xuất: ${response.status}`);
+    const result = await response.json();
+    return { status: result.status, data: result.data, message: result.message };
+  } catch (err) {
+    console.error('Lỗi addExportReceipt:', err.message);
+    throw err;
+  }
+};
+
+export const getExportReceiptById = async (exportReceiptId) => {
+  try {
+    const response = await fetch(`${BASE_URL}/exportReceipt/getExportReceiptById?exportReceiptId=${exportReceiptId}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (!response.ok) throw new Error(`Không thể lấy chi tiết phiếu xuất: ${response.status}`);
+    const result = await response.json();
+    return { status: result.status, data: result.data, message: result.message };
+  } catch (err) {
+    console.error('Lỗi getExportReceiptById:', err.message);
+    throw err;
+  }
+};
+
+// Export Detail APIs
+export const addExportDetail = async (data) => {
+  try {
+    const response = await fetch(`${BASE_URL}/exportDetail/addExportDetail`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify([data]),
+    });
+    if (!response.ok) throw new Error(`Không thể tạo chi tiết xuất: ${response.status}`);
+    const result = await response.json();
+    return { status: result.status, data: result.data, message: result.message };
+  } catch (err) {
+    console.error('Lỗi addExportDetail:', err.message);
+    throw err;
+  }
+};
+
+export const getExportDetailByReceiptId = async (exportReceiptId) => {
+  try {
+    const response = await fetch(`${BASE_URL}/exportDetail/getExportDetailByReceiptId?exportReceiptId=${exportReceiptId}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (!response.ok) throw new Error(`Không thể lấy chi tiết xuất: ${response.status}`);
+    const result = await response.json();
+    return { status: result.status, data: result.data || [], message: result.message };
+  } catch (err) {
+    console.error('Lỗi getExportDetailByReceiptId:', err.message);
+    throw err;
+  }
+};
+
+// Import Receipt APIs (retained from original)
+// export const getAllImportReceipts = async (dateReceipt = new Date().toISOString().split('T')[0]) => {
+//   try {
+//     const response = await fetch(`${BASE_URL}/importReceiptbyImportDate?dateReceipt=${dateReceipt}`, {
+//       method: 'GET',
+//       headers: { 'Content-Type': 'application/json' },
+//     });
+//     if (!response.ok) throw new Error(`Không thể lấy danh sách phiếu nhập: ${response.status}`);
+//     const result = await response.json();
+//     return { status: result.status, data: result.data || [], message: result.message };
+//   } catch (err) {
+//     console.error('Lỗi getAllImportReceipts:', err.message);
+//     throw err;
+//   }
+// };
+export const getAllImportReceipts = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/importReceiptbyImportDate?dateReceipt=2024-03-20`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -247,7 +214,6 @@ export const getAllImportReceipts = async (dateReceipt = new Date().toISOString(
   }
 };
 
-// Tạo phiếu nhập mới
 export const addImportReceipt = async (data) => {
   try {
     const response = await fetch(`${BASE_URL}/importReceipt/addImportReceipt`, {
@@ -264,10 +230,24 @@ export const addImportReceipt = async (data) => {
   }
 };
 
-// Lấy chi tiết phiếu nhập theo ID
-export const getImportReceiptById = async (importReceiptId) => {
+// export const getImportReceiptById = async (importReceiptId) => {
+//   try {
+//     const response = await fetch(`${BASE_URL}/importReceiptbyID?importReceiptID=${importReceiptId}`, {
+//       method: 'GET',
+//       headers: { 'Content-Type': 'application/json' },
+//     });
+//     if (!response.ok) throw new Error(`Không thể lấy chi tiết phiếu nhập: ${response.status}`);
+//     const result = await response.json();
+//     return { status: result.status, data: result.data, message: result.message };
+//   } catch (err) {
+//     console.error('Lỗi getImportReceiptById:', err.message);
+//     throw err;
+//   }
+// };
+
+export const getImportReceiptById = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/importReceiptbyID?importReceiptID=${importReceiptId}`, {
+    const response = await fetch(`${BASE_URL}/importReceiptbyID?importReceiptID=1`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -280,13 +260,12 @@ export const getImportReceiptById = async (importReceiptId) => {
   }
 };
 
-// Thêm chi tiết mặt hàng vào phiếu nhập
 export const addImportDetail = async (data) => {
   try {
     const response = await fetch(`${BASE_URL}/importDetail/addImportDetail`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify([data]),
+      body: JSON.stringify(data),
     });
     if (!response.ok) throw new Error(`Không thể tạo chi tiết nhập: ${response.status}`);
     const result = await response.json();
@@ -297,10 +276,23 @@ export const addImportDetail = async (data) => {
   }
 };
 
-// Lấy danh sách chi tiết mặt hàng theo phiếu nhập
-export const getImportDetailByReceiptId = async (importReceiptId) => {
+// export const getImportDetailByReceiptId = async (importReceiptId) => {
+//   try {
+//     const response = await fetch(`${BASE_URL}/importDetailbyImportReceiptID?importReceiptID=${importReceiptId}`, {
+//       method: 'GET',
+//       headers: { 'Content-Type': 'application/json' },
+//     });
+//     if (!response.ok) throw new Error(`Không thể lấy chi tiết nhập: ${response.status}`);
+//     const result = await response.json();
+//     return { status: result.status, data: result.data || [], message: result.message };
+//   } catch (err) {
+//     console.error('Lỗi getImportDetailByReceiptId:', err.message);
+//     throw err;
+//   }
+// };
+export const getImportDetailByReceiptId = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/importDetailbyImportReceiptID?importReceiptID=${importReceiptId}`, {
+    const response = await fetch(`${BASE_URL}/importDetailbyImportReceiptID?importReceiptID=1`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -313,66 +305,17 @@ export const getImportDetailByReceiptId = async (importReceiptId) => {
   }
 };
 
-// Lấy danh sách chi tiết nhập theo sản phẩm
-export const getImportDetailByProductId = async (productId) => {
+export const deleteImportReceipt = async (importReceiptId) => {
   try {
-    const response = await fetch(`${BASE_URL}/importDetailbyProductID?productID=${productId}`, {
-      method: 'GET',
+    const response = await fetch(`${BASE_URL}/importReceipt/delete?importReceiptID=${importReceiptId}`, {
+      method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     });
-    if (!response.ok) throw new Error(`Không thể lấy chi tiết nhập theo sản phẩm: ${response.status}`);
+    if (!response.ok) throw new Error(`Không thể xóa phiếu nhập: ${response.status}`);
     const result = await response.json();
-    return { status: result.status, data: result.data || [], message: result.message };
+    return { status: result.status, message: result.message };
   } catch (err) {
-    console.error('Lỗi getImportDetailByProductId:', err.message);
-    throw err;
-  }
-};
-
-// Lấy chi tiết nhập theo phiếu và sản phẩm
-export const getImportDetailByReceiptAndProduct = async (importReceiptId, productId) => {
-  try {
-    const response = await fetch(`${BASE_URL}/importDetailbyImportReceiptIDandProductID?importReceiptID=${importReceiptId}&productID=${productId}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    if (!response.ok) throw new Error(`Không thể lấy chi tiết nhập theo phiếu và sản phẩm: ${response.status}`);
-    const result = await response.json();
-    return { status: result.status, data: result.data, message: result.message };
-  } catch (err) {
-    console.error('Lỗi getImportDetailByReceiptAndProduct:', err.message);
-    throw err;
-  }
-};
-
-// Lấy danh sách sản phẩm
-export const getAllProducts = async () => {
-  try {
-    const response = await fetch(`${BASE_URL}/product/getAllProducts`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    if (!response.ok) throw new Error(`Không thể lấy danh sách sản phẩm: ${response.status}`);
-    const result = await response.json();
-    return { status: result.status, data: result.data || [], message: result.message };
-  } catch (err) {
-    console.error('Lỗi getAllProducts:', err.message);
-    throw err;
-  }
-};
-
-// Lấy danh sách đơn vị tính
-export const getAllUnits = async () => {
-  try {
-    const response = await fetch(`${BASE_URL}/unit/getAllUnits`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    if (!response.ok) throw new Error(`Không thể lấy danh sách đơn vị tính: ${response.status}`);
-    const result = await response.json();
-    return { status: result.status, data: result.data || [], message: result.message };
-  } catch (err) {
-    console.error('Lỗi getAllUnits:', err.message);
+    console.error('Lỗi deleteImportReceipt:', err.message);
     throw err;
   }
 };

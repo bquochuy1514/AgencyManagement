@@ -162,6 +162,8 @@ import {
   FaBoxOpen,
   FaBars,
   FaFileImport,
+  FaUsers,
+  FaCog,
 } from 'react-icons/fa';
 import { NavLink, Outlet } from 'react-router-dom';
 
@@ -211,7 +213,7 @@ const MainLayout = () => {
               onClick={() => setIsSidebarOpen(false)}
             >
               <FaUserShield className="w-5 h-5 mr-2" />
-              Đại lý
+              Quản lý đại lý
             </NavLink>
           </li>
           <li>
@@ -223,7 +225,7 @@ const MainLayout = () => {
               onClick={() => setIsSidebarOpen(false)}
             >
               <FaFileImport className="w-5 h-5 mr-2" />
-              Phiếu nhập
+              Phiếu nhập hàng
             </NavLink>
           </li>
           <li>
@@ -235,7 +237,7 @@ const MainLayout = () => {
               onClick={() => setIsSidebarOpen(false)}
             >
               <FaFileExport className="w-5 h-5 mr-2" />
-              Phiếu xuất
+              Phiếu xuất hàng
             </NavLink>
           </li>
           <li>
@@ -247,31 +249,55 @@ const MainLayout = () => {
               onClick={() => setIsSidebarOpen(false)}
             >
               <FaMoneyBillWave className="w-5 h-5 mr-2" />
-              Thu tiền
+              Phiếu thu tiền
             </NavLink>
           </li>
           <li>
             <NavLink
-              to="/reports"
+              to="/sales-report"
               className={({ isActive }) =>
                 `flex items-center p-2 rounded ${isActive ? 'bg-gray-700' : 'hover:bg-gray-700'}`
               }
               onClick={() => setIsSidebarOpen(false)}
             >
               <FaChartBar className="w-5 h-5 mr-2" />
-              Báo cáo
+              Báo cáo doanh số
             </NavLink>
           </li>
           <li>
             <NavLink
-              to="/regulations"
+              to="/debt-report"
               className={({ isActive }) =>
                 `flex items-center p-2 rounded ${isActive ? 'bg-gray-700' : 'hover:bg-gray-700'}`
               }
               onClick={() => setIsSidebarOpen(false)}
             >
-              <FaUserShield className="w-5 h-5 mr-2" />
-              Quy định
+              <FaChartBar className="w-5 h-5 mr-2" />
+              Báo cáo công nợ
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/agent-summary"
+              className={({ isActive }) =>
+                `flex items-center p-2 rounded ${isActive ? 'bg-gray-700' : 'hover:bg-gray-700'}`
+              }
+              onClick={() => setIsSidebarOpen(false)}
+            >
+              <FaUsers className="w-5 h-5 mr-2" />
+              Danh sách đại lý tổng hợp
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/parameter"
+              className={({ isActive }) =>
+                `flex items-center p-2 rounded ${isActive ? 'bg-gray-700' : 'hover:bg-gray-700'}`
+              }
+              onClick={() => setIsSidebarOpen(false)}
+            >
+              <FaCog className="w-5 h-5 mr-2" />
+              Thiết lập hệ thống
             </NavLink>
           </li>
           <li>
