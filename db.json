@@ -76,48 +76,5 @@
       "debtMoney": "55000",
       "agentID": 5
     }
-  ],
-  "importReceipts": [
-    {
-      "importReceiptID": 1,
-      "dateReceipt": "2024-03-20",
-      "totalMoney": 500000,
-      "details": [
-        {
-          "stt": 1,
-          "productID": 1,
-          "productName": "Sữa tươi Vinamilk",
-          "unitID": 1,
-          "unitName": "Thùng",
-          "quantityImport": 10,
-          "importPrice": 50000,
-          "intoMoney": 500000
-        }
-      ]
-    }
-  ],
-  "products": [
-    {
-      "productID": 1,
-      "productName": "Sữa tươi Vinamilk",
-      "unitID": 1,
-      "inventory": 50
-    },
-    {
-      "productID": 2,
-      "productName": "Nước ngọt Coca Cola",
-      "unitID": 2,
-      "inventory": 100
-    }
-  ],
-  "units": [
-    {
-      "unitID": 1,
-      "unitName": "Thùng"
-    },
-    {
-      "unitID": 2,
-      "unitName": "Lon"
-    }
   ]
 }
