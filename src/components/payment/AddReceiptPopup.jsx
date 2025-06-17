@@ -4,33 +4,33 @@ const AddReceiptPopup = ({ onClose, onAdded }) => {
 	const [agents, setAgents] = useState([]);
 	const [selectedAgentID, setSelectedAgentID] = useState('');
 	const [amount, setAmount] = useState('');
-	const [createdBy, setCreatedBy] = useState('');
+	const [paymentDate, setPaymentDate] = useState('');
 
 	useEffect(() => {
-		fetch('http://localhost:3001/agent/getAllAgents')
-			.then((res) => res.json())
-			.then((data) => {
-				if (data.code === 200) setAgents(data.data);
-			});
+		const fetchAgents = async () => {
+			const response = await fetch(
+				'http://localhost:3001/agent/getAllAgents'
+			);
+			const data = await response.json();
+			if (data.code === 200) setAgents(data.data);
+		};
+		fetchAgents();
 	}, []);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const agent = agents.find(
-			(a) => a.agentID === parseInt(selectedAgentID)
-		);
-
 		const newReceipt = {
-			agentID: agent.agentID,
-			amount: parseInt(amount),
-			createdBy: createdBy,
-			paymentDate: new Date().toISOString().slice(0, 10),
+			agentID: {
+				agentID: parseInt(selectedAgentID),
+			},
+			revenue: parseInt(amount),
+			paymentDate,
 		};
 
 		try {
 			const res = await fetch(
-				'http://localhost:3001/payment/addReceipt',
+				'http://localhost:3001/paymentReceipt/addPaymentReceipt',
 				{
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
@@ -92,6 +92,19 @@ const AddReceiptPopup = ({ onClose, onAdded }) => {
 
 					<div>
 						<label className="block text-sm font-medium">
+							Ngày Thu Tiền
+						</label>
+						<input
+							type="date"
+							className="w-full border p-2 rounded"
+							value={paymentDate}
+							onChange={(e) => setPaymentDate(e.target.value)}
+							required
+						/>
+					</div>
+
+					<div>
+						<label className="block text-sm font-medium">
 							Số Tiền Thu
 						</label>
 						<input
@@ -99,19 +112,6 @@ const AddReceiptPopup = ({ onClose, onAdded }) => {
 							className="w-full border p-2 rounded"
 							value={amount}
 							onChange={(e) => setAmount(e.target.value)}
-							required
-						/>
-					</div>
-
-					<div>
-						<label className="block text-sm font-medium">
-							Người Ghi Nhận
-						</label>
-						<input
-							type="text"
-							className="w-full border p-2 rounded"
-							value={createdBy}
-							onChange={(e) => setCreatedBy(e.target.value)}
 							required
 						/>
 					</div>

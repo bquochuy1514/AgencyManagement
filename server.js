@@ -8,7 +8,6 @@ const PORT = 3001;
 
 app.use(cors());
 app.use(bodyParser.json());
-
 // Lấy danh sách đại lý
 app.get('/agent/getAllAgents', (req, res) => {
 	const db = JSON.parse(fs.readFileSync('./db.json', 'utf-8'));
@@ -102,7 +101,7 @@ app.delete('/agent/deleteAgent', (req, res) => {
 	}
 });
 
-app.get('/payment/getAllPaymentReceipts', (req, res) => {
+app.get('/paymentReceipt/getAllPaymentReceipts', (req, res) => {
 	const db = JSON.parse(fs.readFileSync('./db.json', 'utf-8'));
 	const paymentReceipts = db.paymentReceipts || [];
 
@@ -120,6 +119,64 @@ app.get('/payment/getAllPaymentReceipts', (req, res) => {
 			status: 'error',
 		});
 	}
+});
+
+app.post('/paymentReceipt/addPaymentReceipt', (req, res) => {
+	const db = JSON.parse(fs.readFileSync('./db.json', 'utf-8'));
+	const paymentReceipts = db.paymentReceipts || [];
+	const agents = db.agents || [];
+
+	const { agentID, paymentDate, revenue } = req.body;
+
+	if (!agentID?.agentID || !paymentDate || revenue == null) {
+		return res.status(400).json({
+			code: 400,
+			status: 'fail',
+			message: 'Thiếu thông tin phiếu thu',
+		});
+	}
+
+	const foundAgent = agents.find((a) => a.agentID === agentID.agentID);
+
+	if (!foundAgent) {
+		return res.status(404).json({
+			code: 404,
+			status: 'fail',
+			message: 'Không tìm thấy đại lý',
+		});
+	}
+
+	const newReceipt = {
+		paymentReceiptID:
+			paymentReceipts.length > 0
+				? paymentReceipts[paymentReceipts.length - 1].paymentReceiptID +
+				  1
+				: 1,
+		agentID: {
+			agentID: foundAgent.agentID,
+			agentName: foundAgent.agentName,
+			address: foundAgent.address,
+			phone: foundAgent.phone,
+			email: foundAgent.email,
+			paymentDate: paymentDate,
+			revenue: revenue,
+		},
+	};
+
+	paymentReceipts.push(newReceipt);
+
+	fs.writeFileSync(
+		'./db.json',
+		JSON.stringify({ ...db, paymentReceipts }, null, 2),
+		'utf-8'
+	);
+
+	res.status(201).json({
+		code: 201,
+		status: 'success',
+		message: 'Tạo phiếu thu tiền thành công',
+		data: newReceipt,
+	});
 });
 
 app.listen(PORT, () => {

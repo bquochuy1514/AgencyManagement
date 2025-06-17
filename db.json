@@ -80,13 +80,51 @@
 	"paymentReceipts": [
 		{
 			"paymentReceiptID": 1,
-			"agentID": 1,
-			"agentName": "Anh Quan Vinamilk",
-			"address": "137, Hoang Hoa Tham, KCN Binh Duong",
-			"phone": "0180006868",
-			"email": "anhquan@gmail.com",
-			"paymentDate": "2025-06-07",
-			"revenue": 3000000
+			"agentID": {
+				"agentID": 1,
+				"agentName": "Anh Quan Vinamilk",
+				"address": "137, Hoang Hoa Tham, KCN Binh Duong",
+				"phone": "0180006868",
+				"email": "anhquan@gmail.com",
+				"paymentDate": "2025-06-07",
+				"revenue": 3000000
+			}
+		},
+		{
+			"paymentReceiptID": 2,
+			"agentID": {
+				"agentID": 2,
+				"agentName": "Công ty TNHH ABC",
+				"address": "123, Le Loi, Q1",
+				"phone": "0123456789",
+				"email": "abc@gmail.com",
+				"paymentDate": "2025-06-15",
+				"revenue": 1254512
+			}
+		},
+		{
+			"paymentReceiptID": 3,
+			"agentID": {
+				"agentID": 2,
+				"agentName": "Công ty TNHH ABC",
+				"address": "123, Le Loi, Q1",
+				"phone": "0123456789",
+				"email": "abc@gmail.com",
+				"paymentDate": "2025-06-15",
+				"revenue": 1234124
+			}
+		},
+		{
+			"paymentReceiptID": 4,
+			"agentID": {
+				"agentID": 2,
+				"agentName": "Công ty TNHH ABC",
+				"address": "123, Le Loi, Q1",
+				"phone": "0123456789",
+				"email": "abc@gmail.com",
+				"paymentDate": "2025-06-18",
+				"revenue": 15212512
+			}
 		}
 	]
 }

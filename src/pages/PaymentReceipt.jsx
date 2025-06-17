@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { FaPlus, FaSearch } from 'react-icons/fa';
+import { FaEye, FaPlus, FaSearch } from 'react-icons/fa';
 import AddReceiptPopup from '../components/payment/AddReceiptPopup';
+import ViewReceiptPopup from '../components/payment/ViewReceiptPopup';
 
 const PaymentReceipt = () => {
 	const [receipts, setReceipts] = useState([]);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [showAddPopup, setShowAddPopup] = useState(false);
+	const [selectedReceipt, setSelectedReceipt] = useState(null);
 
 	const fetchReceipts = async () => {
 		try {
 			const res = await fetch(
-				'http://localhost:3001/payment/getAllPaymentReceipts'
+				'http://localhost:3001/paymentReceipt/getAllPaymentReceipts'
 			);
 			const data = await res.json();
 			if (data.code === 200) setReceipts(data.data);
@@ -25,8 +27,10 @@ const PaymentReceipt = () => {
 
 	const filteredReceipts = receipts.filter(
 		(r) =>
-			r.agentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			r.paymentDate.includes(searchTerm)
+			r.agentID.agentName
+				.toLowerCase()
+				.includes(searchTerm.toLowerCase()) ||
+			r.agentID.paymentDate.includes(searchTerm)
 	);
 
 	return (
@@ -68,6 +72,13 @@ const PaymentReceipt = () => {
 				/>
 			)}
 
+			{selectedReceipt && (
+				<ViewReceiptPopup
+					receipt={selectedReceipt}
+					onClose={() => setSelectedReceipt(null)}
+				/>
+			)}
+
 			{/* Bảng danh sách phiếu thu */}
 			<div className="bg-gray-800 p-4 rounded-lg shadow-lg">
 				<table className="w-full text-left">
@@ -77,8 +88,7 @@ const PaymentReceipt = () => {
 							<th className="py-3 px-4">Email</th>
 							<th className="py-3 px-4">SĐT</th>
 							<th className="py-3 px-4">Địa Chỉ</th>
-							<th className="py-3 px-4">Ngày Thu</th>
-							<th className="py-3 px-4">Số Tiền Thu</th>
+							<th className="py-3 px-4">Hành động</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -87,13 +97,21 @@ const PaymentReceipt = () => {
 								key={r.paymentReceiptID}
 								className="border-b border-gray-700 hover:bg-gray-700"
 							>
-								<td className="py-3 px-4">{r.agentName}</td>
-								<td className="py-3 px-4">{r.email}</td>
-								<td className="py-3 px-4">{r.phone}</td>
-								<td className="py-3 px-4">{r.address}</td>
-								<td className="py-3 px-4">{r.paymentDate}</td>
 								<td className="py-3 px-4">
-									{r.revenue?.toLocaleString('vi-VN')}₫
+									{r.agentID.agentName}
+								</td>
+								<td className="py-3 px-4">{r.agentID.email}</td>
+								<td className="py-3 px-4">{r.agentID.phone}</td>
+								<td className="py-3 px-4">
+									{r.agentID.address}
+								</td>
+								<td className="py-3 px-4">
+									<button
+										onClick={() => setSelectedReceipt(r)}
+										className="text-green-400 hover:text-green-300"
+									>
+										<FaEye />
+									</button>
 								</td>
 							</tr>
 						))}
