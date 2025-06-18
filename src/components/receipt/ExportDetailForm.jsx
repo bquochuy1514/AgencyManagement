@@ -1,61 +1,72 @@
-// import React, { useState, useEffect } from 'react';
+
+
+// import React, { useState, useEffect, useContext } from 'react';
+// import { addExportDetail } from '../../services/receiptService';
+// import { ProductContext } from '../../App';
+// import { toast } from 'react-toastify';
 
 // const ExportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
+//   const { products, units } = useContext(ProductContext);
 //   const [formData, setFormData] = useState({
 //     exportReceiptID: receiptId,
 //     productID: '',
-//     productName: '',
-//     unitName: '',
+//     unitID: '',
 //     quantityExport: 0,
 //     exportPrice: 0,
 //     intoMoney: 0,
 //   });
 //   const [message, setMessage] = useState(null);
-//   const [productIndex, setProductIndex] = useState((receipt?.details?.length || 0) + 1);
-
-//   useEffect(() => {
-//     setFormData((prev) => ({
-//       ...prev,
-//       exportReceiptID: receiptId,
-//       productID: productIndex.toString(),
-//     }));
-//   }, [receiptId, productIndex]);
 
 //   const handleChange = (e) => {
 //     const { name, value } = e.target;
 //     const updatedFormData = { ...formData, [name]: value };
+//     if (name === 'productID') {
+//       const product = products.find(p => p.productID === parseInt(value));
+//       if (product) {
+//         updatedFormData.unitID = product.unit.unitID.toString();
+//         updatedFormData.exportPrice = product.exportPrice;
+//       }
+//     }
 //     if (name === 'quantityExport' || name === 'exportPrice') {
 //       updatedFormData.intoMoney = Math.max(0, parseInt(updatedFormData.quantityExport || 0) * parseInt(updatedFormData.exportPrice || 0));
 //     }
 //     setFormData(updatedFormData);
 //   };
 
-//   const handleSubmit = (e) => {
+//   const handleSubmit = async (e) => {
 //     e.preventDefault();
-//     if (!formData.productName || !formData.unitName || !formData.quantityExport || !formData.exportPrice) {
+//     if (!formData.productID || !formData.unitID || !formData.quantityExport || !formData.exportPrice) {
 //       setMessage({ type: 'error', text: 'Vui lòng điền đầy đủ thông tin!' });
 //       return;
 //     }
-//     const newDetail = {
-//       stt: productIndex,
-//       productName: formData.productName,
-//       unitName: formData.unitName,
-//       quantityExport: parseInt(formData.quantityExport),
-//       exportPrice: parseInt(formData.exportPrice),
-//       intoMoney: parseInt(formData.intoMoney),
-//     };
-//     onAddDetail(newDetail);
-//     setMessage({ type: 'success', text: 'Thêm chi tiết xuất thành công!' });
-//     setFormData({
-//       exportReceiptID: receiptId,
-//       productID: (productIndex + 1).toString(),
-//       productName: '',
-//       unitName: '',
-//       quantityExport: 0,
-//       exportPrice: 0,
-//       intoMoney: 0,
-//     });
-//     setProductIndex(prev => prev + 1);
+//     try {
+//       const detailData = {
+//         exportReceiptID: { exportReceiptID: parseInt(formData.exportReceiptID) },
+//         productID: { productID: parseInt(formData.productID) },
+//         unitID: { unitID: parseInt(formData.unitID) },
+//         quantityExport: parseInt(formData.quantityExport),
+//         exportPrice: parseInt(formData.exportPrice),
+//       };
+//       const response = await addExportDetail(detailData);
+//       const product = products.find(p => p.productID === parseInt(formData.productID));
+//       const unit = units.find(u => u.unitID === parseInt(formData.unitID));
+//       onAddDetail({
+//         ...response.data,
+//         productName: product.productName,
+//         unitName: unit.unitName,
+//       });
+//       setMessage({ type: 'success', text: 'Thêm chi tiết xuất thành công!' });
+//       setFormData({
+//         exportReceiptID: receiptId,
+//         productID: '',
+//         unitID: '',
+//         quantityExport: 0,
+//         exportPrice: 0,
+//         intoMoney: 0,
+//       });
+//     } catch (err) {
+//       setMessage({ type: 'error', text: 'Lỗi khi thêm chi tiết xuất!' });
+//     }
 //   };
 
 //   return (
@@ -95,36 +106,34 @@
 //           </>
 //         )}
 //         <div>
-//           <label className="block text-gray-300">Mã sản phẩm</label>
-//           <input
-//             type="text"
+//           <label className="block text-gray-300">Sản phẩm</label>
+//           <select
 //             name="productID"
 //             value={formData.productID}
-//             readOnly
-//             className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md bg-gray-700"
-//           />
-//         </div>
-//         <div>
-//           <label className="block text-gray-300">Tên sản phẩm</label>
-//           <input
-//             type="text"
-//             name="productName"
-//             value={formData.productName}
 //             onChange={handleChange}
 //             className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md"
 //             required
-//           />
+//           >
+//             <option value="">Chọn sản phẩm</option>
+//             {products.map(product => (
+//               <option key={product.productID} value={product.productID}>{product.productName}</option>
+//             ))}
+//           </select>
 //         </div>
 //         <div>
 //           <label className="block text-gray-300">Đơn vị tính</label>
-//           <input
-//             type="text"
-//             name="unitName"
-//             value={formData.unitName}
+//           <select
+//             name="unitID"
+//             value={formData.unitID}
 //             onChange={handleChange}
 //             className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md"
 //             required
-//           />
+//           >
+//             <option value="">Chọn đơn vị</option>
+//             {units.map(unit => (
+//               <option key={unit.unitID} value={unit.unitID}>{unit.unitName}</option>
+//             ))}
+//           </select>
 //         </div>
 //         <div>
 //           <label className="block text-gray-300">Số lượng xuất</label>
@@ -180,9 +189,10 @@
 
 
 import React, { useState, useEffect, useContext } from 'react';
-import { addExportDetail } from '../../services/receiptService';
+import { addExportDetail, getInventoryQuantity } from '../../services/receiptService';
 import { ProductContext } from '../../App';
 import { toast } from 'react-toastify';
+import { FaTimes } from 'react-icons/fa';
 
 const ExportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
   const { products, units } = useContext(ProductContext);
@@ -190,13 +200,13 @@ const ExportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
     exportReceiptID: receiptId,
     productID: '',
     unitID: '',
-    quantityExport: 0,
+    quantityExport: '',
     exportPrice: 0,
     intoMoney: 0,
   });
   const [message, setMessage] = useState(null);
 
-  const handleChange = (e) => {
+  const handleChangeDetail = (e) => {
     const { name, value } = e.target;
     const updatedFormData = { ...formData, [name]: value };
     if (name === 'productID') {
@@ -212,10 +222,27 @@ const ExportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
     setFormData(updatedFormData);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmitDetail = async (e) => {
     e.preventDefault();
     if (!formData.productID || !formData.unitID || !formData.quantityExport || !formData.exportPrice) {
       setMessage({ type: 'error', text: 'Vui lòng điền đầy đủ thông tin!' });
+      return;
+    }
+    const product = products.find(p => p.productID === parseInt(formData.productID));
+    if (!product) {
+      setMessage({ type: 'error', text: 'Sản phẩm không tồn tại!' });
+      return;
+    }
+    // Kiểm tra tồn kho
+    try {
+      const inventoryResponse = await getInventoryQuantity(product.productName);
+      const availableQuantity = inventoryResponse.data.inventoryQuantity;
+      if (parseInt(formData.quantityExport) > availableQuantity) {
+        setMessage({ type: 'error', text: `Số lượng xuất (${formData.quantityExport}) vượt quá tồn kho (${availableQuantity})!` });
+        return;
+      }
+    } catch (err) {
+      setMessage({ type: 'error', text: 'Lỗi khi kiểm tra tồn kho!' });
       return;
     }
     try {
@@ -227,7 +254,6 @@ const ExportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
         exportPrice: parseInt(formData.exportPrice),
       };
       const response = await addExportDetail(detailData);
-      const product = products.find(p => p.productID === parseInt(formData.productID));
       const unit = units.find(u => u.unitID === parseInt(formData.unitID));
       onAddDetail({
         ...response.data,
@@ -235,23 +261,30 @@ const ExportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
         unitName: unit.unitName,
       });
       setMessage({ type: 'success', text: 'Thêm chi tiết xuất thành công!' });
+      toast.success('Thêm chi tiết xuất thành công!');
       setFormData({
         exportReceiptID: receiptId,
         productID: '',
         unitID: '',
-        quantityExport: 0,
+        quantityExport: '',
         exportPrice: 0,
         intoMoney: 0,
       });
     } catch (err) {
       setMessage({ type: 'error', text: 'Lỗi khi thêm chi tiết xuất!' });
+      toast.error('Lỗi khi thêm chi tiết xuất!');
     }
   };
 
   return (
-    <div className="p-6 bg-[#2a3b4c] rounded-lg shadow-lg">
-      <h3 className="text-xl font-semibold text-white mb-4">Thêm Chi Tiết Phiếu Xuất</h3>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="p-6 bg-gray-800 rounded-lg shadow-lg text-white">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-2xl font-bold text-yellow-400">Thêm Chi Tiết Phiếu Xuất</h3>
+        <button onClick={onClose} className="text-gray-400 hover:text-gray-300">
+          <FaTimes size={20} />
+        </button>
+      </div>
+      <form onSubmit={handleSubmitDetail} className="space-y-4">
         <div>
           <label className="block text-gray-300">Mã phiếu xuất</label>
           <input
@@ -259,7 +292,7 @@ const ExportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
             name="exportReceiptID"
             value={formData.exportReceiptID}
             readOnly
-            className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md bg-gray-700"
+            className="mt-1 block w-full bg-gray-800 border border-gray-600 rounded-md p-2 text-white cursor-not-allowed"
           />
         </div>
         {receipt && (
@@ -270,16 +303,16 @@ const ExportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
                 type="text"
                 value={new Date(receipt.dateReceipt).toLocaleDateString()}
                 readOnly
-                className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md bg-gray-700"
+                className="mt-1 block w-full bg-gray-800 border border-gray-600 rounded-md p-2 text-white cursor-not-allowed"
               />
             </div>
             <div>
               <label className="block text-gray-300">Tổng tiền</label>
               <input
                 type="text"
-                value={new Intl.NumberFormat('vi-VN').format(receipt.totalMoney) + ' đ'}
+                value={new Intl.NumberFormat('vi-VN').format(receipt.totalPrice || 0) + ' đ'}
                 readOnly
-                className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md bg-gray-700"
+                className="mt-1 block w-full bg-gray-800 border border-gray-600 rounded-md p-2 text-white cursor-not-allowed"
               />
             </div>
           </>
@@ -289,8 +322,8 @@ const ExportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
           <select
             name="productID"
             value={formData.productID}
-            onChange={handleChange}
-            className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md"
+            onChange={handleChangeDetail}
+            className="mt-1 block w-full bg-gray-800 border border-gray-600 rounded-md p-2 text-white"
             required
           >
             <option value="">Chọn sản phẩm</option>
@@ -304,8 +337,8 @@ const ExportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
           <select
             name="unitID"
             value={formData.unitID}
-            onChange={handleChange}
-            className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md"
+            onChange={handleChangeDetail}
+            className="mt-1 block w-full bg-gray-800 border border-gray-600 rounded-md p-2 text-white"
             required
           >
             <option value="">Chọn đơn vị</option>
@@ -320,9 +353,10 @@ const ExportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
             type="number"
             name="quantityExport"
             value={formData.quantityExport}
-            onChange={handleChange}
-            className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md"
+            onChange={handleChangeDetail}
+            className="mt-1 block w-full bg-gray-800 border border-gray-600 rounded-md p-2 text-white"
             required
+            min="0"
           />
         </div>
         <div>
@@ -331,9 +365,10 @@ const ExportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
             type="number"
             name="exportPrice"
             value={formData.exportPrice}
-            onChange={handleChange}
-            className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md"
+            onChange={handleChangeDetail}
+            className="mt-1 block w-full bg-gray-800 border border-gray-600 rounded-md p-2 text-white"
             required
+            min="0"
           />
         </div>
         <div>
@@ -343,7 +378,7 @@ const ExportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
             name="intoMoney"
             value={formData.intoMoney}
             readOnly
-            className="border border-gray-600 p-2 w-full bg-gray-800 text-white rounded-md bg-gray-700"
+            className="mt-1 block w-full bg-gray-800 border border-gray-600 rounded-md p-2 text-white cursor-not-allowed"
           />
         </div>
         {message && (
@@ -351,11 +386,18 @@ const ExportDetailForm = ({ receiptId, receipt, onClose, onAddDetail }) => {
             {message.text}
           </div>
         )}
-        <div className="flex space-x-4">
-          <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+        <div className="flex space-x-4 mt-6">
+          <button
+            type="submit"
+            className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+          >
             Thêm chi tiết
           </button>
-          <button type="button" onClick={onClose} className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition">
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex-1 bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition"
+          >
             Hủy
           </button>
         </div>
