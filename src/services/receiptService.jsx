@@ -184,24 +184,9 @@ export const getExportDetailByReceiptId = async (exportReceiptId) => {
   }
 };
 
-// Import Receipt APIs (retained from original)
-// export const getAllImportReceipts = async (dateReceipt = new Date().toISOString().split('T')[0]) => {
-//   try {
-//     const response = await fetch(`${BASE_URL}/importReceiptbyImportDate?dateReceipt=${dateReceipt}`, {
-//       method: 'GET',
-//       headers: { 'Content-Type': 'application/json' },
-//     });
-//     if (!response.ok) throw new Error(`Không thể lấy danh sách phiếu nhập: ${response.status}`);
-//     const result = await response.json();
-//     return { status: result.status, data: result.data || [], message: result.message };
-//   } catch (err) {
-//     console.error('Lỗi getAllImportReceipts:', err.message);
-//     throw err;
-//   }
-// };
-export const getAllImportReceipts = async () => {
+export const getAllImportReceipts = async (dateReceipt = new Date().toISOString().split('T')[0]) => {
   try {
-    const response = await fetch(`${BASE_URL}/importReceiptbyImportDate?dateReceipt=2024-03-20`, {
+    const response = await fetch(`${BASE_URL}/importReceiptbyImportDate?dateReceipt=${dateReceipt}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -213,6 +198,7 @@ export const getAllImportReceipts = async () => {
     throw err;
   }
 };
+
 
 export const addImportReceipt = async (data) => {
   try {
@@ -230,24 +216,9 @@ export const addImportReceipt = async (data) => {
   }
 };
 
-// export const getImportReceiptById = async (importReceiptId) => {
-//   try {
-//     const response = await fetch(`${BASE_URL}/importReceiptbyID?importReceiptID=${importReceiptId}`, {
-//       method: 'GET',
-//       headers: { 'Content-Type': 'application/json' },
-//     });
-//     if (!response.ok) throw new Error(`Không thể lấy chi tiết phiếu nhập: ${response.status}`);
-//     const result = await response.json();
-//     return { status: result.status, data: result.data, message: result.message };
-//   } catch (err) {
-//     console.error('Lỗi getImportReceiptById:', err.message);
-//     throw err;
-//   }
-// };
-
-export const getImportReceiptById = async () => {
+export const getImportReceiptById = async (importReceiptId) => {
   try {
-    const response = await fetch(`${BASE_URL}/importReceiptbyID?importReceiptID=1`, {
+    const response = await fetch(`${BASE_URL}/importReceiptbyID?importReceiptID=${importReceiptId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -259,6 +230,7 @@ export const getImportReceiptById = async () => {
     throw err;
   }
 };
+
 
 export const addImportDetail = async (data) => {
   try {
@@ -276,23 +248,9 @@ export const addImportDetail = async (data) => {
   }
 };
 
-// export const getImportDetailByReceiptId = async (importReceiptId) => {
-//   try {
-//     const response = await fetch(`${BASE_URL}/importDetailbyImportReceiptID?importReceiptID=${importReceiptId}`, {
-//       method: 'GET',
-//       headers: { 'Content-Type': 'application/json' },
-//     });
-//     if (!response.ok) throw new Error(`Không thể lấy chi tiết nhập: ${response.status}`);
-//     const result = await response.json();
-//     return { status: result.status, data: result.data || [], message: result.message };
-//   } catch (err) {
-//     console.error('Lỗi getImportDetailByReceiptId:', err.message);
-//     throw err;
-//   }
-// };
-export const getImportDetailByReceiptId = async () => {
+export const getImportDetailByReceiptId = async (importReceiptId) => {
   try {
-    const response = await fetch(`${BASE_URL}/importDetailbyImportReceiptID?importReceiptID=1`, {
+    const response = await fetch(`${BASE_URL}/importDetailbyImportReceiptID?importReceiptID=${importReceiptId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });

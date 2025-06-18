@@ -15,23 +15,9 @@ export const getAllProducts = async () => {
   }
 };
 
-// export const getProductById = async (productId) => {
-//   try {
-//     const response = await fetch(`${BASE_URL}/product/getProductById?productId=${productId}`, {
-//       method: 'GET',
-//       headers: { 'Content-Type': 'application/json' },
-//     });
-//     if (!response.ok) throw new Error(`Không thể lấy chi tiết sản phẩm: ${response.status}`);
-//     const result = await response.json();
-//     return { status: result.status, data: result.data, message: result.message };
-//   } catch (err) {
-//     console.error('Lỗi getProductById:', err.message);
-//     throw err;
-//   }
-// };
-export const getProductById = async () => {
+export const getProductById = async (productId) => {
   try {
-    const response = await fetch(`${BASE_URL}/product/getProductById?productId=1`, {
+    const response = await fetch(`${BASE_URL}/product/getProductById?productId=${productId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -43,6 +29,7 @@ export const getProductById = async () => {
     throw err;
   }
 };
+
 
 export const createProduct = async (productData) => {
   try {
@@ -118,27 +105,9 @@ export const decreaseInventory = async (productId, quantity) => {
   }
 };
 
-// export const getInventoryQuantity = async (productName) => {
-//   try {
-//     const response = await fetch(`${BASE_URL}/getInventoryQuantity?productName=${productName}`, {
-//       method: 'GET',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     });
-//     if (!response.ok) {
-//       throw new Error(`Không thể lấy số lượng tồn kho: ${response.status} - ${response.statusText}`);
-//     }
-//     return await response.json();
-//   } catch (err) {
-//     console.error('Lỗi trong getInventoryQuantity:', err.message);
-//     throw err;
-//   }
-// };
-
-export const getInventoryQuantity = async () => {
+export const getInventoryQuantity = async (productName) => {
   try {
-    const response = await fetch(`${BASE_URL}/getInventoryQuantity?productName=sữa tươi`, {
+    const response = await fetch(`${BASE_URL}/getInventoryQuantity?productName=${productName}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -153,3 +122,4 @@ export const getInventoryQuantity = async () => {
     throw err;
   }
 };
+
